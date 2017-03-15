@@ -1,0 +1,3 @@
+[submodule "nFramework"]
+	path = nFramework
+	url = https://github.com/JoepS/nFramework.git
