@@ -1,0 +1,205 @@
+{
+	"name": "Nederlands",
+	"items": [{
+		"key": "start_game_button",
+		"value": "Start Spel"
+	}, {
+		"key": "options_button",
+		"value": "Opties"
+	}, {
+		"key": "exit_game_button",
+		"value": "Afsluiten"
+	}, {
+		"key": "back_button",
+		"value": "Terug"
+	}, {
+		"key": "gold_text",
+		"value": "Goud"
+	}, {
+		"key": "speed_text",
+		"value": "Snelheid"
+	}, {
+		"key": "max_damage_text",
+		"value": "Max schade"
+	}, {
+		"key": "offline_speed_text",
+		"value": "Offline snelheid"
+	}, {
+		"key": "buy_text",
+		"value": "Kopen"
+	}, {
+		"key": "use_text",
+		"value": "Gebruiken"
+	}, {
+		"key": "using_text",
+		"value": "In Gebruik"
+	}, {
+		"key": "item_repair_kit_name",
+		"value": "Reparatie kit"
+	}, {
+		"key": "item_repair_kit_description",
+		"value": "Kan worden gebruikt om te repareren op zee"
+	}, {
+		"key": "in_inventory_text",
+		"value": "In inventaris"
+	}, {
+		"key": "units_text",
+		"value": "Eenheden"
+	}, {
+		"key": "imperial_text",
+		"value": "Imperiaal"
+	}, {
+		"key": "metric_text",
+		"value": "Metrisch"
+	}, {
+		"key": "language_text",
+		"value": "Taal"
+	}, {
+		"key": "dutch_text",
+		"value": "Nederlands"
+	}, {
+		"key": "english_text",
+		"value": "English"
+	}, {
+		"key": "wind_speed_text",
+		"value": "Wind snelheid"
+	}, {
+		"key": "boat_text",
+		"value": "Boot"
+	}, {
+		"key": "choose_route_text",
+		"value": "Kies route"
+	}, {
+		"key": "to_text",
+		"value": "Naar"
+	}, {
+		"key": "cancel_text",
+		"value": "Annuleren"
+	}, {
+		"key": "choose_text",
+		"value": "Kiezen"
+	}, {
+		"key": "days_text",
+		"value": "Dagen"
+	}, {
+		"key": "ready_text",
+		"value": "Klaar"
+	}, {
+		"key": "race_finished_text",
+		"value": "Je bent geëindigd op plek"
+	}, {
+		"key": "finished_race_gold_text",
+		"value": "Je hebt {0} goud verdiend"
+	}, {
+		"key": "continue_text",
+		"value": "Doorgaan"
+	}, {
+		"key": "tournament_text",
+		"value": "Toernooi"
+	}, {
+		"key": "overall_text",
+		"value": "Globaal"
+	}, {
+		"key": "points_text",
+		"value": "Punten"
+	}, {
+		"key": "damage_percent_text",
+		"value": "Je boot heeft {0}% schade"
+	}, {
+		"key": "fix_yourself_text",
+		"value": "Zelf repareren"
+	}, {
+		"key": "let_expert_fix_text",
+		"value": "Laat een expert repareren"
+	}, {
+		"key": "no_need_to_repair_boat_text",
+		"value": "Je hoeft de boot niet te repareren"
+	}, {
+		"key": "fix_percent_for_gold_text",
+		"value": "Repareer {0}% voor {1} goud"
+	}, {
+		"key": "tap_to_start_minigame_text",
+		"value": "Tik om minigame te starten"
+	}, {
+		"key": "minigame_tutorial_text1",
+		"value": "Dit is de tijd die je over hebt om te repareren"
+	}, {
+		"key": "minigame_tutorial_text2",
+		"value": "Dit is het procent aan schade dat je gerepareerd hebt"
+	}, {
+		"key": "click_to_close_tutorial_text",
+		"value": "Tik om de tutorial te sluiten"
+	}, {
+		"key": "inventory_text",
+		"value": "Inventaris"
+	}, {
+		"key": "change_sail_text",
+		"value": "Zeil wissel"
+	}, {
+		"key": "map_text",
+		"value": "Kaart"
+	}, {
+		"key": "last_update_text",
+		"value": "Laatste update"
+	}, {
+		"key": "distance_left_text",
+		"value": "Resterende afstand"
+	}, {
+		"key": "excpected_arrival_time_text",
+		"value": "Verwachte aankomst tijd"
+	}, {
+		"key": "current_speed_text",
+		"value": "Huidige snelheid"
+	}, {
+		"key": "maximum_speed_text",
+		"value": "Maximale snelheid"
+	}, {
+		"key": "max_wind_speed_text",
+		"value": "Max Wind snelheid"
+	}, {
+		"key": "equip_text",
+		"value": "Uitrusten"
+	}, {
+		"key": "active_text",
+		"value": "In gebruik"
+	}, {
+		"key": "close_text",
+		"value": "Sluiten"
+	}, {
+		"key": "damage_text",
+		"value": "Schade"
+	}, {
+		"key": "next_text",
+		"value": "Volgende"
+	}, {
+		"key": "bought_text",
+		"value": "Gekocht"
+	}, {
+		"key": "height_text",
+		"value": "Hoogte"
+	}, {
+		"key": "race_controls_text",
+		"value": "Race bestuuring"
+	}, {
+		"key": "simple_text",
+		"value": "Simpel"
+	}, {
+		"key": "advanced_text",
+		"value": "Gevorderd"
+	}, {
+		"key": "reset_game_text",
+		"value": "Reset Voortgang"
+	}, {
+		"key": "reset_text",
+		"value": "Reset"
+	}, {
+		"key": "confirm_text",
+		"value": "Accepteer"
+	}, {
+		"key": "buy_boat_text",
+		"value": "Koop boot"
+	}, {
+		"key": "dont_have_boat_text",
+		"value": "Je hebt nog geen boot!"
+	}]
+}

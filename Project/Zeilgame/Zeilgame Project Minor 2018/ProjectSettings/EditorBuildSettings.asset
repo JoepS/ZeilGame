@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/1_Scenes/StartMenu.unity
+    guid: 53ae1bf0ca6051143bc0e543927dead0
+  - enabled: 1
+    path: Assets/1_Scenes/SelectLocation.unity
+    guid: 0e095dc3d58b83e4db91eb3141ba5d38
+  - enabled: 1
+    path: Assets/1_Scenes/OptionsScene.unity
+    guid: 752f6598357cea441a395eceafcbe070
+  - enabled: 1
+    path: Assets/1_Scenes/TutorialScene.unity
+    guid: f323005baaa439844989c57690842394
+  - enabled: 1
+    path: Assets/1_Scenes/VillageScene.unity
+    guid: b4cceb076545a634d9a38a2eec955a33
+  - enabled: 1
+    path: Assets/1_Scenes/BoatShopScene.unity
+    guid: c8e085ff4d2c27146bc37968cac0c7ef
+  - enabled: 1
+    path: Assets/1_Scenes/SailShopScene.unity
+    guid: 6daaca043f3c55c4c8bc7a984251d3bb
+  - enabled: 1
+    path: Assets/1_Scenes/UpgradeShopScene.unity
+    guid: e6a7620b0229ae445bc88fd43140e4a6
+  - enabled: 1
+    path: Assets/1_Scenes/MapScene.unity
+    guid: ee4bf59006485a04db51145ed7f2a276
+  - enabled: 1
+    path: Assets/1_Scenes/WeatherScene.unity
+    guid: 2694677e24aab154896ca7382a061ccd
+  - enabled: 1
+    path: Assets/1_Scenes/PickRouteScene.unity
+    guid: 28df033f37ad7f140bbd6336a191bf52
+  - enabled: 1
+    path: Assets/1_Scenes/SailingScene.unity
+    guid: ca3ed58a2f06c4145957f1f33800deb3
+  - enabled: 1
+    path: Assets/1_Scenes/RepairsScene.unity
+    guid: 034568e3358d1e641a1d49be40d1920b
+  - enabled: 1
+    path: Assets/1_Scenes/PickRaceScene.unity
+    guid: 2417304edc54a7345a93d7e6415e90a7
+  - enabled: 1
+    path: Assets/1_Scenes/RaceScene.unity
+    guid: d9a46274f0864ab47bda36488ac7c1c6
+  - enabled: 1
+    path: Assets/1_Scenes/RankingsScene.unity
+    guid: 45d86a05360a0864989005ffda20c5d0
+  - enabled: 1
+    path: Assets/1_Scenes/ItemShopScene.unity
+    guid: 8a2ef19df4268e04aa83037687060966
+  - enabled: 1
+    path: Assets/1_Scenes/AchievementScene.unity
+    guid: f4ce9960496e4dc459acb97cee5c4b52
+  m_configObjects: {}

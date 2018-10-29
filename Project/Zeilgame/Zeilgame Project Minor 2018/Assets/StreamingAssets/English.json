@@ -1,0 +1,205 @@
+{
+	"name": "English",
+	"items": [{
+		"key": "start_game_button",
+		"value": "Start Game"
+	}, {
+		"key": "options_button",
+		"value": "Options"
+	}, {
+		"key": "exit_game_button",
+		"value": "Exit Game"
+	}, {
+		"key": "back_button",
+		"value": "Back"
+	}, {
+		"key": "gold_text",
+		"value": "Gold"
+	}, {
+		"key": "speed_text",
+		"value": "Speed"
+	}, {
+		"key": "max_damage_text",
+		"value": "Max damage"
+	}, {
+		"key": "offline_speed_text",
+		"value": "Offline speed"
+	}, {
+		"key": "buy_text",
+		"value": "Buy"
+	}, {
+		"key": "use_text",
+		"value": "Use"
+	}, {
+		"key": "using_text",
+		"value": "Using"
+	}, {
+		"key": "item_repair_kit_name",
+		"value": "Repair kit"
+	}, {
+		"key": "item_repair_kit_description",
+		"value": "Can be used to repair whilst at sea"
+	}, {
+		"key": "in_inventory_text",
+		"value": "In inventory"
+	}, {
+		"key": "units_text",
+		"value": "Units"
+	}, {
+		"key": "imperial_text",
+		"value": "Imperial"
+	}, {
+		"key": "metric_text",
+		"value": "Metric"
+	}, {
+		"key": "language_text",
+		"value": "Language"
+	}, {
+		"key": "dutch_text",
+		"value": "Nederlands"
+	}, {
+		"key": "english_text",
+		"value": "English"
+	}, {
+		"key": "wind_speed_text",
+		"value": "Wind speed"
+	}, {
+		"key": "boat_text",
+		"value": "Boat"
+	}, {
+		"key": "choose_route_text",
+		"value": "Choose route"
+	}, {
+		"key": "to_text",
+		"value": "To"
+	}, {
+		"key": "cancel_text",
+		"value": "Cancel"
+	}, {
+		"key": "choose_text",
+		"value": "Choose"
+	}, {
+		"key": "days_text",
+		"value": "Days"
+	}, {
+		"key": "ready_text",
+		"value": "Ready"
+	}, {
+		"key": "race_finished_text",
+		"value": "You finished on place"
+	}, {
+		"key": "finished_race_gold_text",
+		"value": "You earned {0} goud"
+	}, {
+		"key": "continue_text",
+		"value": "Continue"
+	}, {
+		"key": "tournament_text",
+		"value": "Tournament"
+	}, {
+		"key": "overall_text",
+		"value": "Overall"
+	}, {
+		"key": "points_text",
+		"value": "Points"
+	}, {
+		"key": "damage_percent_text",
+		"value": "Your boat has {0}% damage"
+	}, {
+		"key": "fix_yourself_text",
+		"value": "Fix it yourself"
+	}, {
+		"key": "let_expert_fix_text",
+		"value": "Let expert fix it"
+	}, {
+		"key": "no_need_to_repair_boat_text",
+		"value": "You dont need to repair the boat"
+	}, {
+		"key": "fix_percent_for_gold_text",
+		"value": "Fix {0}% for {1} gold"
+	}, {
+		"key": "tap_to_start_minigame_text",
+		"value": "Tap to start the minigam"
+	}, {
+		"key": "minigame_tutorial_text1",
+		"value": "This is the time you have left to repair the boat"
+	}, {
+		"key": "minigame_tutorial_text2",
+		"value": "This is the percentage of damage you have repaired"
+	}, {
+		"key": "click_to_close_tutorial_text",
+		"value": "Tap to close the tutorial"
+	}, {
+		"key": "inventory_text",
+		"value": "Inventory"
+	}, {
+		"key": "change_sail_text",
+		"value": "Change sail"
+	}, {
+		"key": "map_text",
+		"value": "Map"
+	}, {
+		"key": "last_update_text",
+		"value": "Last update"
+	}, {
+		"key": "distance_left_text",
+		"value": "Distance left"
+	}, {
+		"key": "excpected_arrival_time_text",
+		"value": "Excpected arrival time"
+	}, {
+		"key": "current_speed_text",
+		"value": "Current speed"
+	}, {
+		"key": "maximum_speed_text",
+		"value": "Maximum speed"
+	}, {
+		"key": "max_wind_speed_text",
+		"value": "Max Wind speed"
+	}, {
+		"key": "equip_text",
+		"value": "Equip"
+	}, {
+		"key": "active_text",
+		"value": "active"
+	}, {
+		"key": "close_text",
+		"value": "Close"
+	}, {
+		"key": "damage_text",
+		"value": "Damage"
+	}, {
+		"key": "next_text",
+		"value": "Next"
+	}, {
+		"key": "bought_text",
+		"value": "Bought"
+	}, {
+		"key": "height_text",
+		"value": "Height"
+	}, {
+		"key": "race_controls_text",
+		"value": "Race controls"
+	}, {
+		"key": "simple_text",
+		"value": "Simple"
+	}, {
+		"key": "advanced_text",
+		"value": "Advanced"
+	}, {
+		"key": "reset_game_text",
+		"value": "Reset Progress"
+	}, {
+		"key": "reset_text",
+		"value": "Reset"
+	}, {
+		"key": "confirm_text",
+		"value": "Confirm"
+	},{
+		"key": "buy_boat_text",
+		"value": "Buy boat"
+	}, {
+		"key": "dont_have_boat_text",
+		"value": "You dont have a boat yet!"
+	}]
+}
