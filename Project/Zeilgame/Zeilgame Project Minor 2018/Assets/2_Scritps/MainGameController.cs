@@ -84,6 +84,10 @@ public class MainGameController : MonoBehaviour {
             else if (!_sceneController.OneSceneBack())
                 CloseGame();
         }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _player.AddExperience(1000);
+        }
 	}
 
     public void CloseGame()

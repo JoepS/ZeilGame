@@ -14,10 +14,14 @@ public class Player : Model {
     public float CurrentLocationLon { get; set; }
     public int CurrentRoute { get; set; }
     public string LastInGame { get; set; }
+    public int Level { get; set; }
+    public int Experience { get; set; }
     DateTime _lastInGame;
 
     Boat _boat;
     Location _location;
+
+    const int BaseXP = 83;
 
     public Vector2 getCurrentLocationLatLon()
     {
@@ -65,8 +69,33 @@ public class Player : Model {
         return _location;
     }
 
+    public void AddExperience(int amount)
+    {
+        this.Experience += amount;
+        CheckIfLevelUp();
+    }
+
+    public void LevelUp()
+    {
+        Level++;
+        Experience = 0;
+        Debug.LogWarning("You Leveled up!\nYou are now level " + Level);
+    }
+
+    public void CheckIfLevelUp()
+    {
+        int levelUpXp = ExperienceController.GetExperienceForLevel(Level);
+        if(Experience > levelUpXp)
+        {
+            int remainderXp = Experience - levelUpXp;
+            Debug.Log("Level Up! Remainder " + remainderXp);
+            LevelUp();
+            AddExperience(remainderXp);
+        }
+    }
+
     public override string ToString()
     {
-        return id + " / " + Name + " / " + Gold + " / " + StartLocation + " / " + CurrentLocation + " / " + CurrentRoute + " / " + GetLastInGame();
+        return id + " / " + Name + " / " + Gold + " / " + StartLocation + " / " + CurrentLocation + " / " + CurrentRoute + " / " + GetLastInGame() + " / " + Level + " / " + Experience;
     }
 }

@@ -242,29 +242,27 @@ public class DatabaseController {
         }
     }
 
-    public void UpdateTable<T>() where T : Model, new()
+    public void UpdateTable<T>(bool removeOld) where T : Model, new()
     {
         TableMapping cvcTableMapping = _connectionVersionCheck.GetMapping<T>();
         List<SQLiteConnection.ColumnInfo> cColumnInfo = _connection.GetTableInfo(typeof(T).ToString());
 
         List<TableMapping.Column> addColumns = cvcTableMapping.Columns.Where(x => cColumnInfo.Where(y => y.Name.Equals(x.Name)).Count() == 0).ToList();
-        List<SQLiteConnection.ColumnInfo> removeColumns = cColumnInfo.Where(x => cvcTableMapping.Columns.Where(y => y.Name.Equals(x.Name)).Count() == 0).ToList();
 
-        Debug.Log(typeof(T) + " / Add: " + addColumns.Count + " / Remove: " + removeColumns.Count + " / " + cvcTableMapping.Columns.Count() + " / " + cColumnInfo.Count());
 
         foreach(TableMapping.Column c in addColumns)
         {
             Debug.Log(typeof(T) + " / " + c.Name + " / " + c.ColumnType.Name);
             string query = string.Format("ALTER TABLE {0} ADD {1} {2}", typeof(T).ToString(), c.Name, GetDatabaseType(c.ColumnType.Name));
             Debug.Log(query);
-            //_connection.Execute(query);
+            _connection.Execute(query);
         }
 
-        foreach(TableMapping.Column c in cvcTableMapping.Columns)
-        {
-            Debug.Log(c.Name);
-        }
+        cvcTableMapping = _connectionVersionCheck.GetMapping<T>();
+        cColumnInfo = _connection.GetTableInfo(typeof(T).ToString());
+        List<SQLiteConnection.ColumnInfo> removeColumns = cColumnInfo.Where(x => cvcTableMapping.Columns.Where(y => y.Name.Equals(x.Name)).Count() == 0).ToList();
 
+        
         if (removeColumns.Count > 0)
         {
             string query1 = "CREATE TEMPORARY TABLE table_backup (";
@@ -297,28 +295,21 @@ public class DatabaseController {
             query4 += ")";
             string query5 = "INSERT INTO " + typeof(T).ToString() + " SELECT * FROM table_backup";
             string query6 = "DROP TABLE table_backup";
-
-            Debug.Log(query1);
+            
             _connection.Execute(query1);
-            Debug.Log(query2);
             _connection.Execute(query2);
-            Debug.Log(query3);
             _connection.Execute(query3);
-            Debug.Log(query4);
             _connection.Execute(query4);
-            Debug.Log(query5);
             _connection.Execute(query5);
-            Debug.Log(query6);
             _connection.Execute(query6);
         }
-
-
-        return;
 
         List<T> checkList = _connectionVersionCheck.Table<T>().ToList();
         foreach(T t in checkList)
         {
-            TableQuery<T> temp = _connection.Table<T>().Where(x => x.id == t.id);
+            List<T> test = _connection.Table<T>().ToList();
+            int id = t.id;
+            List<T> temp = test.Where(x => (x.id) == (id)).ToList();
             if (temp.Count() > 0)
             {
                 T old = temp.First();
@@ -331,11 +322,14 @@ public class DatabaseController {
             }
         }
 
-        List<T> deleteList = _connection.Table<T>().ToList();
-        deleteList = deleteList.Where(x => _connectionVersionCheck.Table<T>().Where(y => y.id == x.id).Count() == 0 && x.id != 0).ToList();
-        foreach (T t in deleteList)
+        if (removeOld)
         {
-            _connection.Delete(t);
+            List<T> deleteList = _connection.Table<T>().ToList();
+            deleteList = deleteList.Where(x => _connectionVersionCheck.Table<T>().Where(y => y.id == x.id).Count() == 0 && x.id != 0).ToList();
+            foreach (T t in deleteList)
+            {
+                _connection.Delete(t);
+            }
         }
 
     }
@@ -359,18 +353,20 @@ public class DatabaseController {
          * Version
         */
         //Boats
-        UpdateTable<Boat>();
-        UpdateTable<Item>();
-        UpdateTable<Location>();
-        UpdateTable<OpponentSetup>();
-        UpdateTable<Person>();
-        UpdateTable<Race>();
-        UpdateTable<Route>();
-        UpdateTable<Sail>();
-        UpdateTable<Track>();
-        UpdateTable<Upgrade>();
-        UpdateTable<Achievement>();
-        UpdateTable<AchievementProperty>();
+        UpdateTable<Achievement>(true);
+        UpdateTable<AchievementProperty>(true);
+        UpdateTable<Boat>(true);
+        UpdateTable<BoatRanking>(false);
+        UpdateTable<Item>(true);
+        UpdateTable<Location>(true);
+        UpdateTable<OpponentSetup>(true);
+        UpdateTable<Person>(true);
+        UpdateTable<Player>(false);
+        UpdateTable<Race>(true);
+        UpdateTable<Route>(true);
+        UpdateTable<Sail>(true);
+        UpdateTable<Track>(true);
+        UpdateTable<Upgrade>(true);
         //UpdateTable<Version>();
     }
 
