@@ -41,10 +41,10 @@ public class WorldMapController : MonoBehaviour {
             ScrollToPosition(playerpos);
         }
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void CreateLocationPointers(bool viewOnlyAvaliableLocations)
@@ -60,7 +60,7 @@ public class WorldMapController : MonoBehaviour {
             List<Location> locations = MainGameController.instance.databaseController.connection.Table<Location>().ToList();
             foreach (Location l in locations)
             {
-                if (MainGameController.instance.player != null) 
+                if (MainGameController.instance.player != null)
                     if (MainGameController.instance.player.GetCurrentLocation().Name != l.Name)
                             CreateLocationPointer(l);
             }
@@ -85,12 +85,6 @@ public class WorldMapController : MonoBehaviour {
 
     public void ShowRoute(Route r)
     {
-        /*string s = "";
-        foreach(Vector2 v2 in r.GetListRoute())
-        {
-            s += JsonUtility.ToJson(MapToWorld(v2)) + ",";
-        }
-        Debug.Log(s);*/
         for (int i = 0; i < _routePointerParent.transform.childCount; i++)
         {
             Destroy(_routePointerParent.transform.GetChild(i).gameObject);
@@ -99,7 +93,7 @@ public class WorldMapController : MonoBehaviour {
         {
             GameObject routePointer = GameObject.Instantiate(_routePointer);
             routePointer.transform.SetParent(_routePointerParent.transform);
-            routePointer.transform.localPosition = WorldToMap(c2);            
+            routePointer.transform.localPosition = WorldToMap(c2);
         }
         _currentRouteShowing = r;
     }

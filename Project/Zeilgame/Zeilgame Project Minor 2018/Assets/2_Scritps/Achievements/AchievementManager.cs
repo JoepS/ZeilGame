@@ -11,6 +11,10 @@ public class AchievementManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _achievements = MainGameController.instance.databaseController.connection.Table<Achievement>().ToList();
+        foreach(Achievement a in _achievements)
+        {
+            Debug.Log(a);
+        }
         _properties = MainGameController.instance.databaseController.connection.Table<AchievementProperty>().ToList();
 	}
 
@@ -18,15 +22,15 @@ public class AchievementManager : MonoBehaviour {
     {
         a.Unlocked = true;
         a.Hidden = false;
-        Debug.Log("Unlocked achievement: " + a);
 
         MainGameController.instance.popupManager.ViewPopup("Achivement Unlocked!\n" + a, null, 10);
         a.Save();
     }
 
-    public void AddAchievementProperty(string name, float amount)
+    public void AddAchievementProperty(AchievementProperties property, float amount)
     {
-        AchievementProperty ap = _properties.Where(x => x.Name.Equals(name)).First();
+        int propertyId = (int)property;
+        AchievementProperty ap = _properties.Where(x => x.id.Equals(propertyId)).First();
         ap.Value += amount;
         ap.Save();
         CheckForAchievementUnlocked();
@@ -52,13 +56,21 @@ public class AchievementManager : MonoBehaviour {
             }
         }
     }
+
+    public void Reset()
+    {
+        _achievements = MainGameController.instance.databaseController.connection.Table<Achievement>().ToList();
+        _properties = MainGameController.instance.databaseController.connection.Table<AchievementProperty>().ToList();
+    }
 }
 
 
 public enum AchievementProperties
 {
-    Distance,
-    Races,
-    RacesWon
+    Distance = 1,
+    Races = 2,
+    RacesWon = 3,
+    BoatsBought = 4,
+    CratesOpened = 5
 }
 

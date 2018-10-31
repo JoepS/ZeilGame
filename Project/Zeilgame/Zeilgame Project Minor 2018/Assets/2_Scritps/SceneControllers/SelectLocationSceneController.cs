@@ -28,10 +28,10 @@ public class SelectLocationSceneController : MonoBehaviour {
         _locationDropdown.AddOptions(options);
         OnDropDownChanged();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void OnNextButtonClick()
@@ -41,12 +41,11 @@ public class SelectLocationSceneController : MonoBehaviour {
         Player p = MainGameController.instance.player;
         Person person = new Person();
         person.New();
-        Debug.Log(p);
         if(p == null)
         {
             p = new Player();
             p.New();
-            
+
         }
         p.Name = name;
         p.StartLocation = location.Name;
@@ -55,9 +54,8 @@ public class SelectLocationSceneController : MonoBehaviour {
         p.CurrentLocationLon = location.lon;
         p.Gold = BeginningGold;
         p.LastInGame = JsonUtility.ToJson((JsonDateTime)DateTime.Now);
-        Debug.Log("Save player: " + p);
         p.Save();
-        
+
         person.Name = name;
         person.LocationId = location.id;
         person.OpponentSetupId = -1;

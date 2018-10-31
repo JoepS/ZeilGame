@@ -87,11 +87,10 @@ public class RepairMiniGameController : MonoBehaviour {
         {
             _difficulty = 6;
         }
-        else 
+        else
         {
             _difficulty = 8;
         }
-        Debug.Log("Difficulty: " + _difficulty);
     }
 
     public void OnPanelClick()
@@ -125,20 +124,18 @@ public class RepairMiniGameController : MonoBehaviour {
     {
         _timerStart = false;
         _canClick = false;
-        Debug.Log("Done");
         if(_slider.value == _maxDamage)
         {
-            Debug.Log("You Completed the Minigame!");
+            Debug.LogError("You Completed the Minigame!");
             _boatToRepair.Damage = 0;
             _boatToRepair.Save();
         }
         else
         {
-            Debug.Log("You couldnt repair the boat in time");
             _boatToRepair.Damage *= 1.1f;
             if (_boatToRepair.Damage > _boatToRepair.GetMaxDamage())
                 _boatToRepair.Damage = _boatToRepair.GetMaxDamage();
-            Debug.Log(_boatToRepair.Damage);
+            Debug.LogError("You Failed the Minigame, your boat has " + _boatToRepair.Damage + " damage"); 
             _boatToRepair.Save();
         }
     }

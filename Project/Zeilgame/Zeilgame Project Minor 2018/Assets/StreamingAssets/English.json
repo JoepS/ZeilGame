@@ -201,5 +201,44 @@
 	}, {
 		"key": "dont_have_boat_text",
 		"value": "You dont have a boat yet!"
+	}, {
+		"key": "achievement_points_text",
+		"value": "Achievement Points"
+	}, {
+		"key": "achievement_distance_name",
+		"value": "Distance Sailed"
+	}, {
+		"key": "achievement_property_distance",
+		"value": "Distance"
+	}, {
+		"key": "achievement_property_races",
+		"value": "Races"
+	}, {
+		"key": "achievement_property_races_won",
+		"value": "Races Won"
+	}, {
+		"key": "achievement_property_boats_bought",
+		"value": "Boats Bought"
+	}, {
+		"key": "achievement_property_crates_opened",
+		"value": "Crates opened"
+	}, {
+		"key": "achievement_distance_description",
+		"value": "Sail a certain distance"
+	}, {
+		"key": "achievement_boats_bought_name",
+		"value": "Boats Bought"
+	}, {
+		"key": "achievement_boats_bought_description",
+		"value": "Buy your first boat!"
+	}, {
+		"key": "achievement_crates_opened_name",
+		"value": "Open Crates"
+	}, {
+		"key": "achievement_crates_opened_description",
+		"value": "Find and open a certain amount of crates"
+	},{
+		"key": "sure_to_reset_text",
+		"value": "Are you sure you want to delete all your game progress?"
 	}]
 }

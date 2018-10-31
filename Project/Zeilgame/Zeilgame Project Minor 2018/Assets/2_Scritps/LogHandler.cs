@@ -20,9 +20,8 @@ public class LogHandler : MonoBehaviour {
     void HandleLog(string logString, string stackTrace, LogType type)
     {
         output = logString;
-
-        string[] lines = stackTrace.Split('\n');
-        MainGameController.instance.popupManager.ViewPopup(output + " / " + stackTrace, null, 5);
+        if(type == LogType.Error || type == LogType.Exception)
+            MainGameController.instance.popupManager.ViewPopup(output + " / " + stackTrace, null, 5);
         stack = stackTrace;
     }
 }

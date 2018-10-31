@@ -8,6 +8,7 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
 
     [SerializeField] Text _popupText;
     [SerializeField] Image _popupImage;
+    [SerializeField] Text _timerText;
 
     PopupData _data;
 
@@ -21,7 +22,13 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
     {
         _canvasGroup = this.GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 0;
-        StartCoroutine(Fade(_data.viewTime));
+        float time = _data.viewTime;
+        if (_data.remainingTime > 0)
+        {
+            time = _data.remainingTime;
+            _remainingViewTime = _data.remainingTime;
+        }
+        StartCoroutine(Fade(time));
     }
 
     public void SetData(PopupData data)
@@ -33,7 +40,7 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
 
     IEnumerator Fade(float time)
     {
-        while(_canvasGroup.alpha < 1)
+        while(_canvasGroup.alpha < 1 && _remainingViewTime == 0)
         {
             _canvasGroup.alpha += 0.1f;
             yield return new WaitForSeconds(0.1f);
@@ -42,18 +49,23 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
         float timeElapsed = 0;
         while(timeElapsed < time && !_clicked)
         {
-            yield return new WaitForSeconds(1);
             timeElapsed += 1;
             _remainingViewTime = time - timeElapsed;
+            if (_remainingViewTime == 0)
+                _remainingViewTime = 0.1f;
+            _timerText.text = timeElapsed + "/" + _remainingViewTime;
+
+            _data.remainingTime = _remainingViewTime;
+            yield return new WaitForSeconds(1);
         }
         float alpha = _canvasGroup.alpha;
-        while(alpha >= 0)
+        MainGameController.instance.popupManager.RemoveDataFromList(this._data);
+        while (alpha >= 0)
         {
             alpha -= 0.1f;
             _canvasGroup.alpha = alpha;
             yield return new WaitForSeconds(0.1f);
         }
-        MainGameController.instance.popupManager.RemoveDataFromList(this._data);
         Destroy(this.gameObject);
     }
 

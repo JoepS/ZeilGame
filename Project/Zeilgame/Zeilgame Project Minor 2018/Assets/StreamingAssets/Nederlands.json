@@ -201,5 +201,44 @@
 	}, {
 		"key": "dont_have_boat_text",
 		"value": "Je hebt nog geen boot!"
+	}, {
+		"key": "achievement_points_text",
+		"value": "Achievement Punten"
+	}, {
+		"key": "achievement_distance_name",
+		"value": "Afstand Gezeild"
+	}, {
+		"key": "achievement_property_distance",
+		"value": "Afstand"
+	}, {
+		"key": "achievement_property_races",
+		"value": "Races"
+	}, {
+		"key": "achievement_property_races_won",
+		"value": "Races Gewonnen"
+	}, {
+		"key": "achievement_property_boats_bought",
+		"value": "Boten Gekocht"
+	}, {
+		"key": "achievement_property_crates_opened",
+		"value": "Kratten geopend"
+	}, {
+		"key": "achievement_distance_description",
+		"value": "Zeil een bepaalde afstand"
+	}, {
+		"key": "achievement_boats_bought_name",
+		"value": "Boten Gekocht"
+	}, {
+		"key": "achievement_boats_bought_description",
+		"value": "Koop je eerste boot!"
+	}, {
+		"key": "achievement_crates_opened_name",
+		"value": "Kratten geopend"
+	}, {
+		"key": "achievement_crates_opened_description",
+		"value": "Vind en open een bepaald aantal kratten"
+	}, {
+		"key": "sure_to_reset_text",
+		"value": "Weet je zeker dat je al je voortgang wil verwijderen?"
 	}]
 }

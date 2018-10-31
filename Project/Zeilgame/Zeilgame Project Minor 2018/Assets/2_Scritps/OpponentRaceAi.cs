@@ -36,7 +36,7 @@ public class OpponentRaceAi : IBoat {
         _hullSpeed = _boat.GetSpeed();
         _tempLineRenderer = this.GetComponent<LineRenderer>();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
         if (_canMove)
@@ -46,18 +46,16 @@ public class OpponentRaceAi : IBoat {
     {
         GameObject temp = _target;
         bool leftOfTargetUpwind = /*_upwindBoat &&*/ _upwindTarget && (this.transform.localPosition.x < _otherTarget.transform.localPosition.x);
-    
+
         if (leftOfTargetUpwind && !_keepGoingSameDirection)
         {
            _target = _otherTarget;
         }
-        //Debug.Log(_target.gameObject.name);
         BoatMovement();
 
         if (CanTack() && !_tacking && !_keepGoingSameDirection)
         {
             GoTack();
-            //Debug.Break();
         }
         _target = temp;
         Vector2 pos = this.transform.localPosition;
@@ -86,32 +84,29 @@ public class OpponentRaceAi : IBoat {
             _targetCounter++;
             if (_targetCounter > _trackOrder.Count - 2)
             {
-                Debug.Log(_person.Name + " Finished!");
                 RaceSceneController.instance.OpponentFinished(this);
                 _keepGoingSameDirection = true;
                 _target = _finishTarget;
             }
             else
             {
-                //Debug.Log("Next Buoy");
-                //Debug.Break();
                 WaypointBuoy newBuoy = _buoys[_trackOrder[_targetCounter]].GetComponent<WaypointBuoy>();
                 if (newBuoy.transform.localPosition.y > this.transform.localPosition.y)
                     this.target = newBuoy.upwindTarget;
                 else
                     this.target = newBuoy.downwindTarget;
 
-                
+
             }
         }
     }
-    
+
 
     bool CanTack()
     {
         Vector3 relativePos = _target.transform.position - this.transform.position;
         _targetAngle = Vector2.Angle(this.transform.up, relativePos);
-        
+
         Vector3 diff = this.transform.position - _target.transform.position;
         diff.Normalize();
 
@@ -129,27 +124,16 @@ public class OpponentRaceAi : IBoat {
             TargetAngleBiggerBestUpwindAngle = _targetAngle >= 5;
         bool TargetToTheRight = this.transform.position.x < _target.transform.position.x;//AngleDir(this.transform.forward, relativePos, this.transform.up) == 1;
         bool TargetLeftButNotGoinToward = (!TargetToTheRight && angleTwTargetOffWind > _bestUpwindAngle);
-        bool JustLuffing = (GetAngleTwWind() > 180 && TargetToTheRight) || (GetAngleTwWind() < 180 && !TargetToTheRight);//(_upwindBoat != _upwindTarget);  
+        bool JustLuffing = (GetAngleTwWind() > 180 && TargetToTheRight) || (GetAngleTwWind() < 180 && !TargetToTheRight);//(_upwindBoat != _upwindTarget);
         bool JustFalling = JustLuffing &&  (!_upwindBoat && !_upwindTarget);
-
-        //if (GetAngleTwWind() > 175 && GetAngleTwWind() < 185)
-        //    JustFalling = false;
-
-        //Debug.Log(TargetAngleBiggerBestUpwindAngle + " && (" + TargetToTheRight + " || " + TargetLeftButNotGoinToward + ") && !" + JustLuffing + " && !" + JustFalling + "(" + GetAngleTwWind() + " - " + targetAngleRelativeToWind + " = " + angleTwTargetOffWind + ")");
+        
 
         if (TargetAngleBiggerBestUpwindAngle && (TargetToTheRight || TargetLeftButNotGoinToward) && !JustLuffing && !JustFalling)
         {
-            //Debug.Log("True");
-            //if (!_tacking)
-            //{
-
-            //    Debug.Break();
-            //}
             return true;
         }
         else
         {
-            //Debug.Log("False");
             return false;
         }
     }

@@ -6,14 +6,13 @@ using System.Linq;
 
 [Table("Achievement")]
 public class Achievement : Model {
-    [PrimaryKey, NotNull, AutoIncrement]
-    public int id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public bool Hidden { get; set; }
     public bool Unlocked { get; set; }
     public string Property { get; set; }
     public string PropertyAmount { get; set; }
+    public int Points { get; set; }
 
     public override string ToString()
     {
@@ -37,6 +36,15 @@ public class Achievement : Model {
     {
         this.Unlocked = false;
         this.Save();
+    }
+
+    public override void Copy(Model m)
+    {
+        Achievement a = (Achievement)m;
+        this.Name = a.Name;
+        this.Description = a.Description;
+        this.Property = a.Property;
+        this.PropertyAmount = a.PropertyAmount;
     }
 
 }

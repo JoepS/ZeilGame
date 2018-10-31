@@ -26,10 +26,10 @@ public class RankingSceneController : MonoBehaviour {
         _boatDropDown.AddOptions(options);
         ShowBoatRankings(boats.First().id);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void ShowBoatRankings(int boatId)
@@ -52,7 +52,6 @@ public class RankingSceneController : MonoBehaviour {
                 if (br.PersonId != MainGameController.instance.player.id)
                 {
                     List<Person> temppersons = MainGameController.instance.databaseController.connection.Table<Person>().Where(x => x.id == br.PersonId).ToList();
-                    Debug.Log(br.PersonId + " / " + temppersons.Count);
                     Person p = temppersons.First();
                     rp.SetData(br, p);
                 }

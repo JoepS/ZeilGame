@@ -34,7 +34,7 @@ public class PopupManager : MonoBehaviour {
         
         foreach(PopupData pd in _popupDatas)
         {
-            if(pd.assignedToGameObject == null) { 
+            if (pd.assignedToGameObject == null && pd.remainingTime >= 1) {
                 ViewPopup(pd);
             }
         }

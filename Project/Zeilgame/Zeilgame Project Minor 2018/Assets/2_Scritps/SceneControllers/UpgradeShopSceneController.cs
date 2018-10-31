@@ -19,11 +19,9 @@ public class UpgradeShopSceneController : MonoBehaviour
     {
         _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
         List<int> ids = MainGameController.instance.player.GetActiveBoat().GetUpgradesId();
-        Debug.Log(ids.Count);
         List<Upgrade> upgrades = MainGameController.instance.databaseController.connection.Table<Upgrade>().Where(x => ids.Contains(x.id)).ToList();
         foreach (Upgrade u in upgrades)
         {
-            Debug.Log(u.id + " / " + u.Name + " / " + u.Price + " / " + u.Bought);
             _upgradeBuyPanels.Add(CreateUpgradeBuyPanel(u));
         }
     }
@@ -32,7 +30,6 @@ public class UpgradeShopSceneController : MonoBehaviour
     {
         if (MainGameController.instance.player.Gold >= u.Price && !u.Bought)
         {
-            Debug.Log("Buy upgrade: " + u);
             u.Bought = true;
             u.Save();
             UpdateUpgradeBuyPanels();
@@ -42,7 +39,7 @@ public class UpgradeShopSceneController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough gold to buy upgrade!");
+            Debug.LogError("Not enough gold to buy upgrade!");
         }
     }
 

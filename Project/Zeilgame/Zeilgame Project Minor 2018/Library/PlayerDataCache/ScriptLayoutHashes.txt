@@ -1,6 +1,6 @@
 Android
 PlayerPath?
-C:/Users/Public/Documents/Unity Projects/Zeilgame2018/Zeilgame Project Minor 2018/Builds/V0.4.3 29-10-2018.apk
+C:/Users/Public/Documents/Unity Projects/Zeilgame2018/Zeilgame Project Minor 2018/Builds/V0.5.4 30-10-2018.apk
 SceneListBegin?
 Assets/1_Scenes/StartMenu.unity
 Assets/1_Scenes/SelectLocation.unity
@@ -36,6 +36,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 30afa8783a8bbee2e465ec9ce1efaee2 UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 607d64d2c4bc76ac9876e6f7b9cc7edf UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
 15edf490c870c34251198d297c46f6ba Assembly-CSharp.dll:.OpponentRaceAi
+1a160df87b51e6ecab1a45caae4479ce Assembly-CSharp.dll:.PopupManager
 4b102cfec7cb93cd78d189884c24db00 Assembly-CSharp.dll:.SailingSceneController
 d7053c71f0a14fbb0fb9ae74c434ec4e Assembly-CSharp.dll:.ItemShopSceneController
 a35dc9cca2faebc5f5f1aeb9e8e47bbe UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
@@ -148,6 +149,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 11d79e90bfaeb1a5785def8ae88b9943 Assembly-CSharp.dll:.BoatBuyPanel
 1f7df69a7f700814e10fc3ff405e6fb4 Assembly-CSharp.dll:.RepairShopController
 1f6d26e29cb38f556302a7500d195d92 Assembly-CSharp.dll:.SelectLocationSceneController
+7e81073f1723043e4849522ce3661dd4 Assembly-CSharp.dll:.LogHandler
 1f9dfc14bbf548d256d3ee29ecf4a461 Assembly-CSharp.dll:.LocalizedText
 cb87ac2be6f41ab4eaddd7e31c11a20d Assembly-CSharp.dll:.SailBuyPanel
 a46d74888b3b44908bd8191c62a95da5 Assembly-CSharp.dll:.ItemUsePanel
@@ -212,8 +214,6 @@ e33128c641e95696017a084002424432 Assembly-CSharp.dll:.AchievementPanel
 551a2a83ff9bf5abb9c797502b26d83a Assembly-CSharp.dll:.MapLocationPointer
 deaa1b461815c24ae38392747bcc7b60 Assembly-CSharp.dll:.WeatherController
 1b2b116feb92e0ecffa2919191e1f78b Assembly-CSharp.dll:.OptionsSceneController
-f2ba19f67e27e589319c886438787f94 Assembly-CSharp.dll:.AchivementSceneController
+cc4a38dc8d7c00b9d81184fc8b393274 Assembly-CSharp.dll:.AchievementSceneController
+56f8e69f36dd1569ae6ea50ef4490bda Assembly-CSharp.dll:.PopupPanel
 71a438b537f4b10c6761c2e048481f7a Assembly-CSharp.dll:.RaceMinimapController
-1a160df87b51e6ecab1a45caae4479ce Assembly-CSharp.dll:.PopupManager
-e9d9d3bbc67892560336b1f0adae4efc Assembly-CSharp.dll:.PopupPanel
-7e81073f1723043e4849522ce3661dd4 Assembly-CSharp.dll:.LogHandler

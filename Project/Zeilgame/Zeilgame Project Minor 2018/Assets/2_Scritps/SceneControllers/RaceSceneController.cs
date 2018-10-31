@@ -18,7 +18,7 @@ public class RaceSceneController : MonoBehaviour {
     [SerializeField] GameObject _waypoint;
     [SerializeField] GameObject _targetPointer;
     [SerializeField] BoatMovement _playerBoat;
-    
+
 
     GameObject _playerTargetBuoy;
 
@@ -91,9 +91,9 @@ void Start () {
         DrawTrack(_currentTrack);
 
         //_waypointsPanel.transform.localPosition = -(Vector3.Lerp(_currentTrack.GetWaypoints()[0], _currentTrack.GetWaypoints()[1], 0.5f) - new Vector3(0, 500, 0));
-        
+
         _buoyIndicator = 0;
-        
+
         List<Person> _avaliablePersons = MainGameController.instance.databaseController.connection.Table<Person>().Where(x =>
 
             x.LocationId == _currentRace.LocationId &&
@@ -168,7 +168,7 @@ void Start () {
         //GetWayPointsTemp();
 #endif
     }
-	
+
 	// Update is called once per frame
 	void Update () {
         //_windAngle = _waypointsPanel.transform.localEulerAngles.z;
@@ -261,10 +261,8 @@ void Start () {
                 list.Add(TempWaypointsPanel.transform.GetChild(i).localPosition);
             }
         }
-        Debug.Log(list.Count);
         ListV2 v2 = new ListV2();
         v2.list = list;
-        Debug.Log(JsonUtility.ToJson(v2));
     }
 #endif
 
@@ -280,7 +278,7 @@ void Start () {
             _buoys.Add(waypoint);
         }
     }
-    
+
     public static void SetRace(Race r)
     {
         _currentRace = r;
@@ -394,7 +392,7 @@ void Start () {
             }
             else
             {
-                MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Races.ToString(), 1);
+                MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Races, 1);
                 Player player = MainGameController.instance.player;
                 Person person = MainGameController.instance.databaseController.connection.Table<Person>().Where(x => x.Name.Equals(player.Name)).First();
                 Boat b = player.GetActiveBoat();
@@ -411,7 +409,7 @@ void Start () {
                 person.RacesSailed++;
                 if (points == 0.9f)
                 {
-                    MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.RacesWon.ToString(), 1);
+                    MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.RacesWon, 1);
                     person.RacesWon++;
                     br.RacesWon++;
                 }

@@ -16,7 +16,7 @@ public class DatabaseController {
     public SQLiteConnection connection
     {
         get
-        { 
+        {
             return _connection;
         }
     }
@@ -33,14 +33,15 @@ public class DatabaseController {
         go = GameObject.Find("StartupText");
 #if UNITY_EDITOR
         var dbPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName);
-        _connectionVersionCheck = new SQLiteConnection(string.Format(@"Assets/StreamingAssets/{0}", DatabaseName), SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+        string connectionPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName.Replace(".db", "2.db"));
+        _connectionVersionCheck = new SQLiteConnection(connectionPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
 #else
         // check if file exists in Application.persistentDataPath
         var filepath = string.Format("{0}/{1}", Application.persistentDataPath, DatabaseName);
 
         if (!File.Exists(filepath))
         {
-            Debug.Log("Database not in Persistent path");
+            //Debug.Log("Database not in Persistent path");
             // if it doesn't ->
             // open StreamingAssets directory and load the db ->
 
@@ -68,12 +69,12 @@ public class DatabaseController {
 	File.Copy(loadDb, filepath);
 #endif
 
-            Debug.Log("Database written");
+            //Debug.Log("Database written");
         }
         else{
 #if UNITY_ANDROID
             var tempFilepath = "";
-            //try { 
+            //try {
                 var loadDb = new WWW("jar:file://" + Application.dataPath + "!/assets/" + DatabaseName);  // this is the path to your StreamingAssets in android
                 while (!loadDb.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
                 tempFilepath = string.Format("{0}/{1}", Application.persistentDataPath, DatabaseName.Replace(".", "2."));
@@ -101,11 +102,13 @@ public class DatabaseController {
 
         //_connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
         _connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+#if UNITY_EDITOR
         Debug.Log("Final PATH: " + dbPath);
+#endif
         CheckIfDBUpToDate();
     }
 
-    public void CheckIfDBUpToDate() { 
+    public void CheckIfDBUpToDate() {
         if (_connectionVersionCheck == null)
         {
             go.GetComponent<Text>().text += "New database so it's up to date";
@@ -115,36 +118,33 @@ public class DatabaseController {
         try
         {
             versionId = _connection.Table<Version>().First().versionId;
+            #if UNITY_EDITOR
             Debug.Log("Current Version ID: " + versionId);
+            #endif
         }
         catch(Exception e)
         {
-            Debug.Log(e.Message);
+            Debug.LogError(e.Message);
         }
-        int newDbId = -1; 
+        int newDbId = -1;
         try
         {
             newDbId = _connectionVersionCheck.Table<Version>().First().versionId;
+            #if UNITY_EDITOR
             Debug.Log("New Version ID: " + newDbId);
+            #endif
         }
         catch(Exception e)
         {
-            Debug.Log(e.Message + " \n " + _connectionVersionCheck + "\n It throws an error here?");
+            Debug.LogError(e.Message + " \n " + _connectionVersionCheck + "\n It throws an error here?");
         }
         //als versie verouderd is
         if (newDbId > versionId)
         {
-            Debug.Log("New version");
-            
-            if (go != null)
-                Debug.Log("\nThere is a new version");
-
             UpdateDB();
         }
         else
         {
-            if (go != null)
-                Debug.Log("Same Version");
 #if !UNITY_EDITOR
             File.Delete(_connectionVersionCheck.DatabasePath);
 #endif
@@ -190,7 +190,6 @@ public class DatabaseController {
             rijndael.IV = iv;
             encMessage = EncryptBytes(rijndael, file);
         }
-        Debug.Log("\nEncrypt: " + dbPath);
         File.WriteAllBytes(dbPath, encMessage);
         return true;
     }
@@ -243,10 +242,108 @@ public class DatabaseController {
         }
     }
 
+    public void UpdateTable<T>() where T : Model, new()
+    {
+        TableMapping cvcTableMapping = _connectionVersionCheck.GetMapping<T>();
+        List<SQLiteConnection.ColumnInfo> cColumnInfo = _connection.GetTableInfo(typeof(T).ToString());
+
+        List<TableMapping.Column> addColumns = cvcTableMapping.Columns.Where(x => cColumnInfo.Where(y => y.Name.Equals(x.Name)).Count() == 0).ToList();
+        List<SQLiteConnection.ColumnInfo> removeColumns = cColumnInfo.Where(x => cvcTableMapping.Columns.Where(y => y.Name.Equals(x.Name)).Count() == 0).ToList();
+
+        Debug.Log(typeof(T) + " / Add: " + addColumns.Count + " / Remove: " + removeColumns.Count + " / " + cvcTableMapping.Columns.Count() + " / " + cColumnInfo.Count());
+
+        foreach(TableMapping.Column c in addColumns)
+        {
+            Debug.Log(typeof(T) + " / " + c.Name + " / " + c.ColumnType.Name);
+            string query = string.Format("ALTER TABLE {0} ADD {1} {2}", typeof(T).ToString(), c.Name, GetDatabaseType(c.ColumnType.Name));
+            Debug.Log(query);
+            //_connection.Execute(query);
+        }
+
+        foreach(TableMapping.Column c in cvcTableMapping.Columns)
+        {
+            Debug.Log(c.Name);
+        }
+
+        if (removeColumns.Count > 0)
+        {
+            string query1 = "CREATE TEMPORARY TABLE table_backup (";
+            query1 += cvcTableMapping.FindColumnWithPropertyName("id").Name + " PRIMARY KEY, ";
+            foreach (TableMapping.Column c in cvcTableMapping.Columns)
+            {
+                if(c.Name != "id")
+                {
+                    query1 += c.Name + ",";
+                }
+            }
+            query1 = query1.Remove(query1.Length - 1);
+            query1 += ")";
+            string query2 = "INSERT INTO table_backup SELECT id, ";
+            foreach(TableMapping.Column c in cvcTableMapping.Columns)
+            {
+                if(c.Name != "id")
+                    query2 +=  c.Name + ",";
+            }
+            query2 = query2.Remove(query2.Length - 1);
+            query2 += " from " + typeof(T).ToString();
+            string query3 = "DROP TABLE " + typeof(T).ToString();
+            string query4 = "CREATE TABLE " + typeof(T).ToString() + "(id PRIMARY KEY, ";
+            foreach(TableMapping.Column c in cvcTableMapping.Columns)
+            {
+                if(c.Name != "id")
+                    query4 += c.Name + ",";
+            }
+            query4 = query4.Remove(query4.Length - 1);
+            query4 += ")";
+            string query5 = "INSERT INTO " + typeof(T).ToString() + " SELECT * FROM table_backup";
+            string query6 = "DROP TABLE table_backup";
+
+            Debug.Log(query1);
+            _connection.Execute(query1);
+            Debug.Log(query2);
+            _connection.Execute(query2);
+            Debug.Log(query3);
+            _connection.Execute(query3);
+            Debug.Log(query4);
+            _connection.Execute(query4);
+            Debug.Log(query5);
+            _connection.Execute(query5);
+            Debug.Log(query6);
+            _connection.Execute(query6);
+        }
+
+
+        return;
+
+        List<T> checkList = _connectionVersionCheck.Table<T>().ToList();
+        foreach(T t in checkList)
+        {
+            TableQuery<T> temp = _connection.Table<T>().Where(x => x.id == t.id);
+            if (temp.Count() > 0)
+            {
+                T old = temp.First();
+                old.Copy(t);
+                _connection.Update(old);
+            }
+            else
+            {
+                _connection.Insert(t);
+            }
+        }
+
+        List<T> deleteList = _connection.Table<T>().ToList();
+        deleteList = deleteList.Where(x => _connectionVersionCheck.Table<T>().Where(y => y.id == x.id).Count() == 0 && x.id != 0).ToList();
+        foreach (T t in deleteList)
+        {
+            _connection.Delete(t);
+        }
+
+    }
+
     public void UpdateDB()
     {
         /* Update
-         * 
+         *
          * Boats
          * Items
          * Locations
@@ -262,298 +359,46 @@ public class DatabaseController {
          * Version
         */
         //Boats
-        foreach (Boat b in _connectionVersionCheck.Table<Boat>().ToList())
-        {
-            TableQuery<Boat> temp = _connection.Table<Boat>().Where(x => x.id == b.id);
-            if (temp.Count() > 0)
-            {
-                    Boat oldb = temp.First();
-                    oldb.Sails = b.Sails;
-                    oldb.Upgrades = b.Upgrades;
-                    oldb.Price = b.Price;
-                    oldb.OfflineSpeed = b.OfflineSpeed;
-                    oldb.NGZLimit = b.NGZLimit;
-                    oldb.Name = b.Name;
-                    _connection.Update(oldb);
-            }
-            else
-            {
-                _connection.Insert(b);
-            }
-        }
-        //Items
-        try { 
-        foreach (Item i in _connectionVersionCheck.Table<Item>().ToList())
-        {
-            TableQuery<Item> temp = _connection.Table<Item>().Where(x => x.id == i.id);
-            if (temp.Count() > 0)
-            {
-                Item oldi = temp.First();
-                oldi.Name = i.Name;
-                oldi.Price = i.Price;
-                oldi.Description = i.Description;
-                    _connection.Update(oldi);
-            }
-            else
-            {
-                    _connection.Insert(i);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Items";
-        }
-        //Locations
-        try { 
-        foreach (Location l in _connectionVersionCheck.Table<Location>().ToList())
-        {
-            TableQuery<Location> temp = _connection.Table<Location>().Where(x => x.id == l.id);
-            if(temp.Count() > 0)
-            {
-                Location oldl = temp.First();
-                oldl.AvaliableBoats = l.AvaliableBoats;
-                    _connection.Update(oldl);
-            }
-            else
-            {
-                    _connection.Insert(l);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Locations";
-        }
-        //Opponent Setups
-        try { 
-        foreach (OpponentSetup o in _connectionVersionCheck.Table<OpponentSetup>().ToList())
-        {
-            TableQuery<OpponentSetup> temp = _connection.Table<OpponentSetup>().Where(x => x.id == o.id);
-            if(temp.Count() > 0)
-            {
-                OpponentSetup oldo = temp.First();
-                oldo.TackingAccuracy = o.TackingAccuracy;
-                oldo.TackingExtra = o.TackingExtra;
-                oldo.TackingSpeed = o.TackingSpeed;
-                oldo.BestUpwindAngle = o.BestUpwindAngle;
-               _connection.Update(oldo);
-            }
-            else
-            {
-                    _connection.Insert(o);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "OpponentSetups";
-        }
-        //Persons
-        try { 
-        foreach (Person p in _connectionVersionCheck.Table<Person>().ToList())
-        {
-            TableQuery<Person> temp = _connection.Table<Person>().Where(x => x.id == p.id);
-            if(temp.Count() > 0)
-            {
-                Person oldp = temp.First();
-                oldp.Name = p.Name;
-                oldp.BoatId = p.BoatId;
-                oldp.LocationId = p.LocationId;
-                oldp.OpponentSetupId = p.OpponentSetupId;
-                    _connection.Update(oldp);
-            }
-            else
-            {
-                    _connection.Insert(p);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Persons";
-        }
-        //Races
-        try { 
-        foreach (Race r in _connectionVersionCheck.Table<Race>().ToList())
-        {
-            TableQuery<Race> temp = _connection.Table<Race>().Where(x => x.id == r.id);
-            if(temp.Count() > 0)
-            {
-                Race oldr = temp.First();
-                oldr.Name = r.Name;
-                oldr.BoatsUsedId = r.BoatsUsedId;
-                oldr.Difficulty = r.Difficulty;
-                oldr.LocationId = r.LocationId;
-                oldr.TrackId = r.TrackId;
-                    _connection.Update(oldr);
-            }
-            else
-            {
-                    _connection.Insert(r);
-                }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Races";
-        }
-        //Routes
-        try { 
-        foreach (Route r in _connectionVersionCheck.Table<Route>().ToList())
-        {
-            TableQuery<Route> temp = _connection.Table<Route>().Where(x => x.id == r.id);
-            if(temp.Count() > 0)
-            {
-                Route oldr = temp.First();
-                oldr.route = r.route;
-                    _connection.Update(oldr);
-            }
-            else
-            {
-                    _connection.Insert(r);
-                }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Routes";
-        }
-        //Sails
-        try { 
-        foreach (Sail s in _connectionVersionCheck.Table<Sail>().ToList())
-        {
-            TableQuery<Sail> temp = _connection.Table<Sail>().Where(x => x.id == s.id);
-            if(temp.Count() > 0)
-            {
-                Sail olds = temp.First();
-                olds.Name = s.Name;
-                olds.Price = s.Price;
-                olds.MaxWindSpeed = s.MaxWindSpeed;
-                olds.DamageModifier = s.DamageModifier;
-                olds.SpeedModifier = s.SpeedModifier;
-                olds.OfflineSpeedModifier = s.OfflineSpeedModifier;
-                    _connection.Update(olds);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Sails";
-        }
-        //Track
-        try { 
-        foreach (Track t in _connectionVersionCheck.Table<Track>().ToList())
-        {
-            TableQuery<Track> temp = _connection.Table<Track>().Where(x => x.id == t.id);
-            if(temp.Count() > 0)
-            {
-                Track oldt = temp.First();
-                oldt.Name = t.Name;
-                oldt.Waypoints = t.Waypoints;
-                oldt.WaypointOrder = t.WaypointOrder;
-                    _connection.Update(oldt);
-            }
-            else
-            {
-                _connection.Insert(t);
-            }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Tracks";
-        }
-        //Upgrade
-        try { 
-        foreach (Upgrade u in _connectionVersionCheck.Table<Upgrade>().ToList())
-        {
-            TableQuery<Upgrade> temp = _connection.Table<Upgrade>().Where(x => x.id == u.id);
-            if(temp.Count() > 0)
-            {
-                Upgrade oldu = temp.First();
-                oldu.Name = u.Name;
-                oldu.Price = u.Price;
-                oldu.HeightModifier = u.HeightModifier;
-                oldu.SpeedModifier = u.SpeedModifier;
-                oldu.DamageModifier = u.DamageModifier;
-                oldu.OfflineSpeedModifier = u.OfflineSpeedModifier;
-                    _connection.Update(oldu);
-            }
-            else
-            {
-                    _connection.Insert(u);
-                }
-        }
-        }
-        catch
-        {
-            go.GetComponent<Text>().text += "Upgrades";
-        }
+        UpdateTable<Boat>();
+        UpdateTable<Item>();
+        UpdateTable<Location>();
+        UpdateTable<OpponentSetup>();
+        UpdateTable<Person>();
+        UpdateTable<Race>();
+        UpdateTable<Route>();
+        UpdateTable<Sail>();
+        UpdateTable<Track>();
+        UpdateTable<Upgrade>();
+        UpdateTable<Achievement>();
+        UpdateTable<AchievementProperty>();
+        //UpdateTable<Version>();
+    }
 
-        if(_connection.Table<Achievement>() == null)
+    public string GetDatabaseType(string type)
+    {
+        switch (type)
         {
-            _connection.CreateTable(typeof(Achievement));
+            case "String":
+                return DBTypes.TEXT.ToString();
+            case "Int32":
+                return DBTypes.INTEGER.ToString();
+            case "Boolean":
+                return DBTypes.INTEGER.ToString();
+            case "Single":
+                return DBTypes.REAL.ToString();
+            default:
+                Debug.LogWarning("Didnt recognize this type: " + type);
+                return DBTypes.TEXT.ToString();
         }
+    }
 
-        //Achivements
-        foreach(Achievement a in _connectionVersionCheck.Table<Achievement>())
-        {
-            TableQuery<Achievement> temp = _connection.Table<Achievement>().Where(x => x.id == a.id);
-            if(temp.Count() > 0)
-            {
-                Achievement olda = temp.First();
-                olda.Name = a.Name;
-                olda.Description = a.Description;
-                olda.Property = a.Property;
-                olda.PropertyAmount = a.PropertyAmount;
-                _connection.Update(olda);
-            }
-            else
-            {
-                _connection.Insert(a);
-            }
-        }
-
-        if(_connection.Table<AchievementProperty>() == null)
-        {
-            _connection.CreateTable(typeof(AchievementProperty));
-        }
-        //AchievementProperty
-        foreach(AchievementProperty a in _connectionVersionCheck.Table<AchievementProperty>())
-        {
-            TableQuery<AchievementProperty> temp = _connection.Table<AchievementProperty>().Where(x => x.id == a.id);
-            if(temp.Count() > 0)
-            {
-                AchievementProperty olda = temp.First();
-                olda.Name = a.Name;
-                _connection.Update(olda);
-            }
-            else
-            {
-                _connection.Insert(a);
-            }
-        }
-
-        //Version
-        try { 
-        Version v = _connectionVersionCheck.Table<Version>().First();
-        TableQuery<Version> tempV = _connection.Table<Version>();
-        if(tempV.Count() > 0)
-        {
-            Version oldv = tempV.First();
-            oldv.versionId = v.versionId;
-                _connection.Update(oldv);
-        }
-        else
-        {
-                _connection.Insert(v);
-            }
-        }
-        catch(Exception e)
-        {
-            go.GetComponent<Text>().text += "\nVersion\n" + e.Message;
-        }
+    enum DBTypes
+    {
+        TEXT,
+        INTEGER,
+        BLOB,
+        REAL,
+        NUMERIC
     }
 }
 

@@ -85,7 +85,6 @@ public class OptionsSceneController : MonoBehaviour {
     {
         _simpleButton.interactable = !_simpleButton.interactable;
         _advancedButton.interactable = !_advancedButton.interactable;
-        Debug.Log("Set key " + type);
         PlayerPrefs.SetString(BoatMovement.SimpleOrAdvancedSettingKey, type);
     }
 
@@ -148,6 +147,7 @@ public class OptionsSceneController : MonoBehaviour {
         MainGameController.instance.player = null;
         MainGameController.instance.sceneController.ResetStack();
         MainGameController.instance.sceneController.LoadScene("StartMenu", false);
+        MainGameController.instance.achievementManager.Reset();
     }
 
 }

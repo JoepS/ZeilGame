@@ -60,12 +60,12 @@ public class MapSceneController : MonoBehaviour {
         _worldMapController.CreateLocationPointers(false);
         AddMapLocationPointers();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
-    
+
     public void OnCityClick(MapLocationPointer mlp)
     {
         foreach (MapLocationPointer pointer in _worldMapController.GetLocationPointers())
@@ -75,7 +75,6 @@ public class MapSceneController : MonoBehaviour {
 
         mlp.SetPopupText(mlp.GetLocation().Name);
         mlp.ViewPopupPanel(true);
-        Debug.Log(mlp.GetLocation().Name);
     }
 
     public void OnBackButtonClick()

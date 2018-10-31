@@ -25,8 +25,6 @@ public class WeatherData
         this.dt = (int)data["dt"];
         this.sys = JsonMapper.ToObject<SysOld>(data["sys"].ToJson());
         this.cityName = data["name"].ToString();
-
-        //Debug.Log("Coord:" + this.coord + " weather:" + this.weather + " main:" + this.main + " visibility:" + this.visibility + " wind:" + this.wind + " clouds:" + this.clouds + " sys:" + this.sys + " name:" + this.cityName + "\n");
     }
 
     public double getWindDir()

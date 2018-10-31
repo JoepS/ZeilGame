@@ -2,8 +2,6 @@
 
 [Table("OpponentSetup")]
 public class OpponentSetup : Model {
-    [PrimaryKey, NotNull, AutoIncrement]
-    public int id { get; set; }
     public float TackingAccuracy { get; set; }
     public float TackingExtra { get; set; }
     public float TackingSpeed { get; set; }
@@ -12,5 +10,15 @@ public class OpponentSetup : Model {
     public override string ToString()
     {
         return id + " / " + TackingAccuracy + " / " + TackingExtra + " / " + TackingSpeed + " / " + BestUpwindAngle;
+    }
+
+    public override void Copy(Model m)
+    {
+        OpponentSetup o = (OpponentSetup)m;
+
+        this.TackingAccuracy = o.TackingAccuracy;
+        this.TackingExtra = o.TackingExtra;
+        this.TackingSpeed = o.TackingSpeed;
+        this.BestUpwindAngle = o.BestUpwindAngle;
     }
 }

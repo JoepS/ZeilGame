@@ -6,8 +6,6 @@ using System;
 
 [Table("Route")]
 public class Route : Model {
-    [PrimaryKey, AutoIncrement, NotNull]
-    public int id { get; set; }
     public int from { get; set; }
     Location fromLocation { get; set; }
     public int to { get; set; }
@@ -74,7 +72,6 @@ public class Route : Model {
     {
         if(from != startLocation.id && !_reversed) 
         {
-            Debug.Log("Reverse List!");
             if (listroute == null)
                 listroute = JsonUtility.FromJson<ListV2>(route);
             listroute.list.Reverse();
@@ -185,5 +182,12 @@ public class Route : Model {
             s += " / " + v;
         }
         return s;
+    }
+
+    public override void Copy(Model m)
+    {
+        Route r = (Route)m;
+
+        this.route = r.route;
     }
 }

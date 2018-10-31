@@ -57,7 +57,6 @@ public class SceneController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("No Scenes to pop");
             return false;
         }
     }

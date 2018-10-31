@@ -125,7 +125,7 @@ public class RepairShopController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Not enough money: " + cost);
+            Debug.LogError("Not enough money: " + cost);
         }
     }
 }

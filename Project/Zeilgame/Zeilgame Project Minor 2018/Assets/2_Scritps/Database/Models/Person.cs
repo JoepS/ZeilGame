@@ -2,8 +2,6 @@
 
 [Table("Person")]
 public class Person : Model {
-    [PrimaryKey, NotNull, AutoIncrement]
-    public int id { get; set; }
     public string Name { get; set; }
     public int BoatId { get; set; }
     public int LocationId { get; set; }
@@ -23,5 +21,15 @@ public class Person : Model {
         this.RacesWon = 0;
         this.LifetimePoints = 0;
         this.Save();
+    }
+
+    public override void Copy(Model m)
+    {
+        Person p = (Person)m;
+
+        this.Name = p.Name;
+        this.BoatId = p.BoatId;
+        this.LocationId = p.LocationId;
+        this.OpponentSetupId = p.OpponentSetupId;
     }
 }

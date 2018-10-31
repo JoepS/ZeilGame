@@ -4,10 +4,7 @@ using UnityEngine;
 using SQLite4Unity3d;
 
 [Table("Location")]
-public class Location : Model {
-
-    [PrimaryKey, AutoIncrement, NotNull]
-    public int id { get; set; }
+public class Location : Model { 
     public string Name { get; set; }
     public float lat { get; set; }
     public float lon { get; set; }
@@ -27,6 +24,12 @@ public class Location : Model {
     {
         ListInt li = JsonUtility.FromJson<ListInt>(AvaliableBoats);
         return li.list;
+    }
+
+    public override void Copy(Model m)
+    {
+        Location l = (Location)m;
+        this.AvaliableBoats = l.AvaliableBoats;
     }
 
 }

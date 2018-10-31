@@ -53,6 +53,7 @@ public class RandomItemCrate : MonoBehaviour, IPointerDownHandler{
         go.transform.SetParent(this.transform.parent.parent);
         go.transform.localPosition = this.transform.localPosition ;
         go.transform.localScale = Vector3.one;
+        MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.CratesOpened, 1);
         if (_randomItem == null)
         {
             MainGameController.instance.player.Gold += _randomGoldAmount;

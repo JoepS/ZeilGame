@@ -66,12 +66,10 @@ public class NetworkController : MonoBehaviour
 
     public IEnumerator request(string url, int index)
     {
-        //Debug.Log(url);
         WWW www = new WWW(url);
         yield return www;
         if (www.error == string.Empty || www.error == null)
         {
-            //Debug.Log(www.text);
             if (www.texture.height == 256)
             {
                 Texture2D texture = new Texture2D(www.texture.width, www.texture.height, TextureFormat.DXT1, false);
@@ -84,8 +82,7 @@ public class NetworkController : MonoBehaviour
         }
         else
         {
-            Debug.Log(url + "\n gives the folowing error:");
-            Debug.Log(www.error);
+            Debug.LogError(url + "\n gives the folowing error:" + www.error);
         }
     }
 
@@ -101,7 +98,6 @@ public class NetworkController : MonoBehaviour
         else if (json.Contains("coord"))
         {
             JsonData jd = JsonMapper.ToObject(json);
-            //Debug.Log(json);
             WeatherData wd = new WeatherData(jd);
             _owmController.lastData = wd;
             string key = Responses.Weather.ToString() + weatherIndex;
@@ -133,8 +129,10 @@ public class NetworkController : MonoBehaviour
         key = type.ToString() + (index);
         if (!_responses.ContainsKey(key))
         {
-            //Debug.Log("I dont have this key: " + key);
-            //Debug.Log("WeatherIndex: " + (weatherIndex - 1) + "/ WeatherRectIndex: " + (weatherRectIndex - 1) + "/ WeatherImageIndex: " + (weatherImageIndex - 1));
+#if UNITY_EDITOR
+            Debug.Log("I dont have this key: " + key);
+            Debug.Log("WeatherIndex: " + (weatherIndex - 1) + "/ WeatherRectIndex: " + (weatherRectIndex - 1) + "/ WeatherImageIndex: " + (weatherImageIndex - 1));
+#endif
             return null;
         }
         object value = _responses[key];

@@ -10,7 +10,7 @@ public class BoatShopSceneController : MonoBehaviour {
     [SerializeField] GameObject _boatBuyPanel;
     [SerializeField] GameObject _boatBuyScrollViewContent;
     [SerializeField] Text _goldText;
- 
+
     List<BoatBuyPanel> _boatBuyPanels = new List<BoatBuyPanel>();
 
 	// Use this for initialization
@@ -19,14 +19,13 @@ public class BoatShopSceneController : MonoBehaviour {
         List<Boat> boats = GetAvaliableBoats();
         foreach(Boat b in boats)
         {
-            Debug.Log(b);
             _boatBuyPanels.Add(CreateBoatBuyPanel(b));
         }
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void BuyBoat(Boat b)
@@ -39,8 +38,7 @@ public class BoatShopSceneController : MonoBehaviour {
                 previousBoat.Active = false;
                 previousBoat.Save();
             }
-
-            Debug.Log("Buy boat: " + b);
+            MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.BoatsBought, 1);
             b.Bought = true;
             b.Active = true;
             b.Save();
@@ -51,13 +49,12 @@ public class BoatShopSceneController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Not enough gold to buy boat!");
+            Debug.LogError("Not enough gold to buy boat!");
         }
     }
-    
+
     public void UseBoat(Boat b)
     {
-        Debug.Log("Use boat: " + b);
         TableQuery<Boat> activeBoats = MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.Active == true);
         if (activeBoats.Count() > 0) {
             Boat curActive = activeBoats.First();

@@ -53,14 +53,9 @@ public class LocalizationManager : MonoBehaviour
             {
                 localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
             }
-
-            Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
-
-        //}
-        //else
-        //{
-        //    Debug.LogError("Cannot find file!\nPath: " + filePath);
-        //}
+#if UNITY_EDITOR
+        Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
+#endif
         _currentLanguage = fileName.Replace(".json", "");
         isReady = true;
     }

@@ -71,7 +71,7 @@ public class SailingSceneController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Unknown object on stack: " + MainGameController.instance.sceneController.PopFromStack());
+                    Debug.LogError("Unknown object on stack: " + MainGameController.instance.sceneController.PopFromStack());
                 }
 
             }
@@ -87,7 +87,7 @@ public class SailingSceneController : MonoBehaviour
 
         _route = MainGameController.instance.databaseController.connection.Table<Route>().Where(x => x.id == MainGameController.instance.player.CurrentRoute).First();
         _timeSinceLastLogin = DateTime.Now - MainGameController.instance.player.GetLastInGame();
-        
+
         Vector2 playerposition = new Vector2(MainGameController.instance.player.CurrentLocationLat, MainGameController.instance.player.CurrentLocationLon);
         Location startLocation = MainGameController.instance.databaseController.connection.Table<Location>().Where(x => x.id == MainGameController.instance.player.CurrentLocation).First();
         float totaldistance = _route.GetRouteDistanceFromPosition(playerposition, startLocation);
@@ -96,7 +96,7 @@ public class SailingSceneController : MonoBehaviour
             speed = MainGameController.instance.player.GetActiveBoat().GetOfflineSpeed();
 
         float distanceOffline = ((float)_timeSinceLastLogin.TotalHours * speed);
-        MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Distance.ToString(), distanceOffline);
+        MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Distance, distanceOffline);
         float distance = totaldistance - distanceOffline;
         _route.SetDistanceLeft(distance);
 
@@ -114,7 +114,9 @@ public class SailingSceneController : MonoBehaviour
             {
                 float minutes = (float)_timeSinceLastLogin.TotalMinutes;
                 MainGameController.instance.player.GetActiveBoat().Damage += minutes * 0.01f;
+                #if UNITY_EDITOR
                 Debug.Log("Received " + (minutes * 0.01f) + " damage");
+                #endif
                 _receivedOfflineDamage = true;
                 StartCoroutine(receiveDamage());
             }
@@ -122,7 +124,7 @@ public class SailingSceneController : MonoBehaviour
     }
 
     float SpeedMultiplier = 0;
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -140,14 +142,13 @@ public class SailingSceneController : MonoBehaviour
         MoveBoat();
         UpdateInfoPanels();
 
-       
+
 	}
 
     IEnumerator receiveDamage()
     {
         while (true)
         {
-            Debug.Log("Max damage: " + MainGameController.instance.player.GetActiveBoat().GetMaxDamage());
             float randomDamageAmount = UnityEngine.Random.Range(0.1f, 1f);
             if (MainGameController.instance.player.GetActiveBoat().Damage + randomDamageAmount > MainGameController.instance.player.GetActiveBoat().GetMaxDamage())
             {
@@ -158,7 +159,6 @@ public class SailingSceneController : MonoBehaviour
                 MainGameController.instance.player.GetActiveBoat().Damage += randomDamageAmount;
             }
             MainGameController.instance.player.GetActiveBoat().Save();
-            Debug.Log(MainGameController.instance.player.GetActiveBoat().Damage);
             float waitTime = UnityEngine.Random.Range(15, 60);
             yield return new WaitForSeconds(waitTime);
         }
@@ -190,7 +190,7 @@ public class SailingSceneController : MonoBehaviour
         while (_isMoving)
         {
             float distance = _currentSpeed / 3600;
-            MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Distance.ToString(), distance);
+            MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Distance, distance);
             float distanceLeft = _route.GetDistanceLeft() - distance;
             if (distanceLeft <= 0)
             {
@@ -207,7 +207,7 @@ public class SailingSceneController : MonoBehaviour
             }
             if (_weatherController.GetCurrentData() != null)
             {
-                
+
 
                 if (_weatherController.GetCurrentData().getWindSpeed() > MainGameController.instance.player.GetActiveBoat().GetMaxWindSpeedSails() &&
                     !DamageCoroutineStarted)
@@ -216,18 +216,15 @@ public class SailingSceneController : MonoBehaviour
                     {
                         float minutes = (float)_timeSinceLastLogin.TotalMinutes;
                         MainGameController.instance.player.GetActiveBoat().Damage += minutes * 0.01f;
-                        Debug.Log("Received " + (minutes * 0.01f) + " damage");
                         _receivedOfflineDamage = true;
                     }
                     DamageCoroutineStarted = true;
                     StartCoroutine(receiveDamage());
-                    Debug.Log("Damage Coroutine Started");
                 }
                 if(_weatherController.GetCurrentData().getWindSpeed() < MainGameController.instance.player.GetActiveBoat().GetMaxWindSpeedSails() && DamageCoroutineStarted)
                 {
                     DamageCoroutineStarted = false;
                     StopCoroutine(receiveDamage());
-                    Debug.Log("Damage Coroutine Stopped");
                 }
             }
             _arrivalTime = DateTime.Now + _route.GetTimeLeft(_currentSpeed);
@@ -278,9 +275,7 @@ public class SailingSceneController : MonoBehaviour
     void ArrivedAtLocation()
     {
         _isMoving = false;
-        Debug.Log("Arrived in town");
         Location arrivalLocation = _route.GetToLocation();
-        Debug.Log("To Location: " + arrivalLocation);
         if (MainGameController.instance.player.CurrentLocation == _route.GetToLocation().id)
         {
             arrivalLocation = _route.GetFromLocation();
@@ -290,8 +285,6 @@ public class SailingSceneController : MonoBehaviour
         MainGameController.instance.player.CurrentLocation = arrivalLocation.id;
         MainGameController.instance.player.setCurrentLocationLatLon(arrivalLocation.GetLocation());
         MainGameController.instance.player.CurrentRoute = -1;
-
-        Debug.Log("Arrived at : " + MainGameController.instance.databaseController.connection.Table<Location>().Where(x => x.id == arrivalLocation.id).First().Name);
 
         _arrivedPanel.SetActive(true);
     }
@@ -315,7 +308,7 @@ public class SailingSceneController : MonoBehaviour
             _sailChangePanels.Add(go);
         }
         _sailChangePanel.SetActive(false);
-        
+
     }
 
     public void SetInventoryPanelItems()
@@ -378,7 +371,6 @@ public class SailingSceneController : MonoBehaviour
         i.UseItem();
         if (i.InInventory <= 0)
         {
-            Debug.Log("Remove item panel " + i);
             _itemUsePanels.Remove(iup);
             Destroy(iup.gameObject);
         }

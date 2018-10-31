@@ -5,7 +5,12 @@ using SQLite4Unity3d;
 
 [Table("Version")]
 public class Version : Model {
-    [PrimaryKey, NotNull]
-    public int id { get; set; }
     public int versionId { get; set; }
+
+    public override void Copy(Model m)
+    {
+        Version v = (Version)m;
+
+        this.versionId = v.versionId;
+    }
 }

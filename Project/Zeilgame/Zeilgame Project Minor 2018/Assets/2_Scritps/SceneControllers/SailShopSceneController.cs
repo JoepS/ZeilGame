@@ -19,7 +19,6 @@ public class SailShopSceneController : MonoBehaviour {
         List<Sail> sails = MainGameController.instance.databaseController.connection.Table<Sail>().ToList();
         foreach (Sail b in sails)
         {
-            Debug.Log(b.id + " / " + b.Name + " / " + b.Price + " / " + b.Bought);
             _sailBuyPanels.Add(CreateSailBuyPanel(b));
         }
     }
@@ -35,7 +34,6 @@ public class SailShopSceneController : MonoBehaviour {
                 previousSail.Save();
             }
 
-            Debug.Log("Buy sail: " + s);
             s.Bought = true;
             s.Active = true;
             s.Save();
@@ -46,13 +44,12 @@ public class SailShopSceneController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Not enough gold to buy sail!");
+            Debug.LogError("Not enough gold to buy sail!");
         }
     }
 
     public void UseSail(Sail s)
     {
-        Debug.Log("Use sail: " + s);
         TableQuery<Sail> activeSails = MainGameController.instance.databaseController.connection.Table<Sail>().Where(x => x.Active == true);
         if (activeSails.Count() > 0)
         {

@@ -6,9 +6,6 @@ using UnityEngine;
 
 [Table("player")]
 public class Player : Model {
-
-    [PrimaryKey, AutoIncrement, NotNull]
-    public int id { get; set; }
     public string Name { get; set; }
     public float Gold { get; set; }
     public string StartLocation { get; set; }
@@ -54,9 +51,8 @@ public class Player : Model {
             {
                 _boat = MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.Active).First();
             }
-            catch(Exception e)
+            catch
             {
-                Debug.Log(e);
                 _boat = null;
             }
         }
@@ -71,6 +67,6 @@ public class Player : Model {
 
     public override string ToString()
     {
-        return id + " / " + Name + " / " + Gold + " / " + StartLocation + " / " + CurrentLocation + " / " + CurrentRoute + " / " + GetLastInGame(); 
+        return id + " / " + Name + " / " + Gold + " / " + StartLocation + " / " + CurrentLocation + " / " + CurrentRoute + " / " + GetLastInGame();
     }
 }

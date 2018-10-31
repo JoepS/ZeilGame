@@ -22,6 +22,8 @@ public class RepairsSceneController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _boatToRepair = MainGameController.instance.player.GetActiveBoat();
+        if (_boatToRepair == null)
+            return;
         _dmgPercent = (_boatToRepair.Damage / _boatToRepair.GetMaxDamage()) * 100;
         _dmgPercent = Mathf.Round(_dmgPercent * 100) / 100;
         string text = string.Format(MainGameController.instance.localizationManager.GetLocalizedValue("damage_percent_text"), _dmgPercent);

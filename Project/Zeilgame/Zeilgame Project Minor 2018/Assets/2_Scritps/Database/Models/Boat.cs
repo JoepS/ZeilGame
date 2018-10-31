@@ -6,9 +6,6 @@ using SQLite4Unity3d;
 
 [Table("Boat")]
 public class Boat : Model {
-
-    [PrimaryKey, AutoIncrement, NotNull]
-    public int id { get; set; }
     public string Name { get; set; }
     public int Price { get; set; }
     public bool Bought { get; set; }
@@ -37,6 +34,18 @@ public class Boat : Model {
         this.Bought = false;
         this.Damage = 0;
         this.Save();
+    }
+
+    public override void Copy(Model m)
+    {
+        Boat b = (Boat)m;
+
+        this.Sails = b.Sails;
+        this.Upgrades = b.Upgrades;
+        this.Price = b.Price;
+        this.OfflineSpeed = b.OfflineSpeed;
+        this.NGZLimit = b.NGZLimit;
+        this.Name = b.Name;
     }
 
     public List<int> GetUpgradesId()

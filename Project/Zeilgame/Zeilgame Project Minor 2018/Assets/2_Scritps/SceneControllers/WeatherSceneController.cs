@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class WeatherSceneController : MonoBehaviour {
-    
+
     [SerializeField] GameObject _windImagesParent;
     [SerializeField] GameObject _windImagePrefab;
 
@@ -25,7 +25,7 @@ public class WeatherSceneController : MonoBehaviour {
 	void Start () {
         StartCoroutine(getWindImages());
     }
-	
+
 	// Update is called once per frame
 	void Update () {
 #if UNITY_EDITOR
@@ -39,9 +39,7 @@ public class WeatherSceneController : MonoBehaviour {
     public IEnumerator getWindImages()
     {
         float worldMapSize = _windImagesParent.GetComponent<RectTransform>().sizeDelta.x;
-        Debug.Log(worldMapSize);
         int amount = Mathf.RoundToInt(Mathf.Sqrt((worldMapSize / 2048)));
-        Debug.Log("Getwindimageszoom: " + amount);
 
         int maxxy = (int)Mathf.Pow(2, amount);
 
@@ -67,7 +65,6 @@ public class WeatherSceneController : MonoBehaviour {
             for (int fy = maxy; fy >= miny; fy--)
             {
                 int index = MainGameController.instance.networkController.getWindImage(amount, fx, fy);
-                Debug.LogError("Index = " + index);
                 lastIndex = index;
                 StartCoroutine(WaitForImageResponse(index, new Vector2(fx, fy)));
                 yield return new WaitForSeconds(0.1f);
@@ -80,14 +77,13 @@ public class WeatherSceneController : MonoBehaviour {
 
         //MainGameController.instance.networkController.getWindImage(0, 0, 0);
         //StartCoroutine(WaitForImageResponse());
-        
+
     }
 
     public IEnumerator viewWeatherMapWhenDone(int lastIndex)
     {
         while(lastIndex != _loadedIndex)
         {
-            Debug.Log("" + lastIndex + " != " + _loadedIndex);
             yield return new WaitForSeconds(1);
         }
         _windImagesParent.SetActive(true);
@@ -98,7 +94,7 @@ public class WeatherSceneController : MonoBehaviour {
 
     public void ZoomMap(bool increase)
     {
-        
+
         _currZoom = (increase) ? _currZoom * 2 : _currZoom / 2;
         if (_currZoom > _maxZoom)
         {
@@ -116,8 +112,7 @@ public class WeatherSceneController : MonoBehaviour {
         }
         else
             _zoomOutButton.interactable = true;
-        
-        Debug.Log("CurZoom: " + _currZoom);
+
         float newsize = 4096 * _currZoom;
         Vector2 size = new Vector2(newsize, newsize);
         _scrollviewContent.GetComponent<RectTransform>().sizeDelta = size;
@@ -139,11 +134,9 @@ public class WeatherSceneController : MonoBehaviour {
         Sprite weatherImage = (Sprite)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
         while(weatherImage == null)
         {
-            Debug.Log("Waiting for response...");
             yield return new WaitForSeconds(1);
             weatherImage = (Sprite)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
         }
-        Debug.Log("Got weather image " + index + " / " + weatherImage);
         GameObject windImage = GameObject.Instantiate(_windImagePrefab);
         windImage.transform.SetParent(_windImagesParent.transform);
         windImage.name = "WindImage" + pos;
@@ -154,7 +147,6 @@ public class WeatherSceneController : MonoBehaviour {
         windImage.transform.localScale = Vector3.one;
         windImage.transform.localPosition = new Vector2(pos.x * 2048, pos.y * -2048);
         _loadedIndex += 1;
-        Debug.LogError("Loaded index + 1 = " + _loadedIndex);
     }
 
 
@@ -182,12 +174,9 @@ public class WeatherSceneController : MonoBehaviour {
         RectangularWeatherData data = (RectangularWeatherData)MainGameController.instance.networkController.getResponse(Responses.WeatherRect, -1);
         while(data == null)
         {
-            Debug.Log("Waiting for response...");
             yield return new WaitForSeconds(1);
             data = (RectangularWeatherData)MainGameController.instance.networkController.getResponse(Responses.WeatherRect, -1);
         }
-        Debug.Log("Got a response:");
-        Debug.Log(data);
     }
 
     public void OnBackButtonClick()

@@ -33,10 +33,10 @@ public class PickRouteSceneController : MonoBehaviour {
 	void Start () {
         addLocationListeners();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
     public void ZoomMap(bool increase)
@@ -59,7 +59,7 @@ public class PickRouteSceneController : MonoBehaviour {
         }
         else
             _zoomOutButton.interactable = true;
-        
+
         float newsize = 4096 * _currZoom;
         Vector2 size = new Vector2(newsize, newsize);
         _scrollviewContent.GetComponent<RectTransform>().sizeDelta = size;
@@ -68,7 +68,7 @@ public class PickRouteSceneController : MonoBehaviour {
         _worldMap.GetComponent<WorldMapController>().ScrollToPosition(MainGameController.instance.player.getCurrentLocationLatLon());
         _worldMap.GetComponent<WorldMapController>().CreateLocationPointers(true);
         addLocationListeners();
-        
+
     }
 
     public void addLocationListeners()
@@ -85,7 +85,7 @@ public class PickRouteSceneController : MonoBehaviour {
         Player p = MainGameController.instance.player;
         Location curLocation = MainGameController.instance.databaseController.connection.Table<Location>().Where(x => x.id == p.CurrentLocation).First();
         int destId = mlp.GetLocation().id;
-        SQLite4Unity3d.TableQuery<Route> routes = MainGameController.instance.databaseController.connection.Table<Route>().Where(x => 
+        SQLite4Unity3d.TableQuery<Route> routes = MainGameController.instance.databaseController.connection.Table<Route>().Where(x =>
             (x.to == destId && x.from == curLocation.id) || (x.from == destId && x.to == curLocation.id));
         if (routes.Count() == 1)
         {
@@ -99,10 +99,6 @@ public class PickRouteSceneController : MonoBehaviour {
                 _noBoatPanel.SetActive(true);
                 _chooseRouteButton.interactable = false;
             }
-        }
-        else
-        {
-            Debug.Log(routes.Count());
         }
     }
 

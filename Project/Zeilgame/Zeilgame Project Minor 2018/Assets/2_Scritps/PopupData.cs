@@ -10,6 +10,9 @@ public class PopupData  {
     float _viewTime;
     public float viewTime { get { return _viewTime; } }
 
+    float _remainingTime;
+    public float remainingTime { get { return _remainingTime;} set { _remainingTime = value; } }
+
     GameObject _assignedToGameObject;
     public GameObject assignedToGameObject { get { return _assignedToGameObject; } set { _assignedToGameObject = value; } }
 

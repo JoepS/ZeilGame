@@ -5,9 +5,7 @@ using SQLite4Unity3d;
 
 [Table("Track")]
 public class Track : Model {
-
-	[PrimaryKey, NotNull, AutoIncrement]
-    public int id { get; set; }
+    
     public string Name { get; set; }
     public string Waypoints { get; set; }
     public string WaypointOrder { get; set; }
@@ -31,5 +29,14 @@ public class Track : Model {
     public override string ToString()
     {
         return id + " / " + Name + " / " + Waypoints + " / " + WaypointOrder;
+    }
+
+    public override void Copy(Model m)
+    {
+        Track t = (Track)m;
+
+        this.Name = t.Name;
+        this.Waypoints = t.Waypoints;
+        this.WaypointOrder = t.WaypointOrder;
     }
 }

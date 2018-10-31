@@ -12,8 +12,10 @@ public class AchievementPanel : MonoBehaviour {
 
 	public void SetData(Achievement a)
     {
-        _achivementNameText.text = a.Name;
-        _achivementDescriptionText.text = a.Description;
+        LocalizationManager lz = MainGameController.instance.localizationManager;
+
+        _achivementNameText.text = lz.GetLocalizedValue(a.Name);
+        _achivementDescriptionText.text = lz.GetLocalizedValue(a.Description);
         List<AchievementProperty> properties = a.GetProperties();
         List<float> propertyValues = a.GetPropertiesAmount();
         string s = "";
@@ -23,7 +25,7 @@ public class AchievementPanel : MonoBehaviour {
             int propertiesAmount = Mathf.RoundToInt(properties[i].Value);
             if (propertiesAmount > propertyValues[i])
                 propertiesAmount = Mathf.RoundToInt(propertyValues[i]);
-            s += properties[i].Name + ": " + propertiesAmount + " / " + propertyValues[i] + "\n";
+            s += lz.GetLocalizedValue(properties[i].Name) + ": " + propertiesAmount + " / " + propertyValues[i] + "\n";
         }
 
         _achivementUnlockConditionText.text = s;

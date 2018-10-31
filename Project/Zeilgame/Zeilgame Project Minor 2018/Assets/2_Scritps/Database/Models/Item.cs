@@ -3,8 +3,6 @@ using SQLite4Unity3d;
 
 [Table("Item")]
 public class Item : Model {
-    [PrimaryKey, NotNull, AutoIncrement]
-    public int id { get; set; }
     public string Name { get; set; }
     public int Price { get; set; }
     public string Description { get; set; }
@@ -36,5 +34,13 @@ public class Item : Model {
                 Debug.LogError("Unknown item to use: " + this);
                 break;
         }
+    }
+
+    public override void Copy(Model m)
+    {
+        Item i = (Item)m;
+        this.Name = i.Name;
+        this.Price = i.Price;
+        this.Description = i.Description;
     }
 }

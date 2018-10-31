@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SQLite4Unity3d;
 
 public class Model {
+    [PrimaryKey, NotNull]
+    public int id { get; set; }
 
     public void New()
     {
@@ -22,5 +25,10 @@ public class Model {
     public virtual void Reset()
     {
         throw new System.Exception("No reset function definend!");
+    }
+
+    public virtual void Copy(Model m)
+    {
+        throw new System.Exception("No copy function defined!");
     }
 }

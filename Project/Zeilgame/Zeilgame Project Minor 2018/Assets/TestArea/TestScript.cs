@@ -83,9 +83,6 @@ public class TestScript : MonoBehaviour {
                 windangle *= -1;
             if (windangle == 0)
                 windangle = 1;
-            //float angle = Mathf.Abs(i- targetAngle);
-            //float vmg = VelocityMadeGood(10, windangle, angle, (windangle < 90), 0);
-            //Debug.Log("Wind angle:" + windangle + " Angle: " + angle + " vmg: " + vmg);
 
             GameObject speedgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             speedgo.transform.localScale = new Vector3(10, 10, 10);
@@ -129,28 +126,6 @@ public class TestScript : MonoBehaviour {
 
     public float calculateForwardSpeed(float angleToWind, float windSpeed, float currentSpeed, bool upwind)
     {
-        //float speed = 0;
-        //if (angleToWind > 180)
-        //    angleToWind = 360 - angleToWind;
-        //_minVelocity = 0;// -((_hullSpeed / (180-_ngzLimit)) * _ngzLimit);
-        //_maxVelocity = _hullSpeed + ((_hullSpeed / (180 - _ngzLimit)) * _ngzLimit) * (windSpeed * 0.25f);
-        //if (angleToWind < _bestWindAngle)
-        //    speed = Mathf.Lerp(_minVelocity, _maxVelocity, angleToWind / _bestWindAngle);
-        //else
-        //    speed = Mathf.Lerp(_maxVelocity, _maxVelocity * 0.6f, (angleToWind - _bestWindAngle) / 50);
-        ////if (angleToWind < _ngzLimit)
-        ////    speed = 1;
-        //speed = Mathf.Log(speed) * windSpeed;
-        //return speed;
-
-        //if (upwind)
-        //    return (currentSpeed - Mathf.Cos((angleToWind) * Mathf.Deg2Rad)) * windSpeed;
-        //else
-        //    return (currentSpeed + Mathf.Cos((180 - angleToWind) * Mathf.Deg2Rad)) * windSpeed;
-
-        Debug.Log("Current speed: " + currentSpeed);
-        Debug.Log("Upwind (" + angleToWind + "):" + upwind);
-
         float tw = windSpeed;
         float b = angleToWind;
         if(!upwind)
@@ -165,25 +140,18 @@ public class TestScript : MonoBehaviour {
 
 
         float aparantspeed = Mathf.Sqrt(twpow + cspow + twoWV * cosb);
-        Debug.Log("TW: " + windSpeed + " / AW: " + aparantspeed);
-        //Debug.Log("Sqrt( " + twpow + " + " + cspow + " + " + twoWV + " * " + cosb + ") = " + aparantspeed);
 ;
         float a = Mathf.Acos((tw * Mathf.Cos(b) + currentSpeed) / aparantspeed);
-        Debug.Log("TWº: " + (b*Mathf.Rad2Deg) + "/ AWº: " + (a * Mathf.Rad2Deg));
 
         float x = (Mathf.Sin(b) * Mathf.Cos(a)) / Mathf.Sin(a);
         x = Mathf.Cos(a) * aparantspeed;
-
-        Debug.Log("x: " + x + " / cos(b): " + Mathf.Cos(b));
 
         float bs;
         if (upwind)
             bs = x - Mathf.Cos(b);
         else
             bs = x + Mathf.Cos(b);
-        
-
-        Debug.Log((b * Mathf.Rad2Deg) + " / " + bs);
+       
         return bs;
 
     }

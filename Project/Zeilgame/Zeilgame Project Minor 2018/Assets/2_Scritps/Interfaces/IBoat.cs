@@ -112,7 +112,6 @@ public class IBoat : MonoBehaviour {
         Vector3 other = _target.transform.position - this.transform.position;
 
         float angledir = Vector2.Dot(this.transform.right, other);
-        //Debug.Log(angledir);
 
         float tempTwTargetThingy = 1;
         if (myangle > 180)
@@ -135,8 +134,7 @@ public class IBoat : MonoBehaviour {
             twTargetWindangle *= -1;
         if (twTargetWindangle > 180)
             twTargetWindangle = 360 - twTargetWindangle;
-
-       // Debug.Log(angleTwWind + " / " + twTargetWindangle);
+        
         float vmgTowardsTarget = VelocityMadeGood(windSpeed, twTargetWindangle, 0, angleTwWind < 90);
 
         if (vmgUp == float.PositiveInfinity || vmgUp == float.NegativeInfinity)
@@ -146,12 +144,11 @@ public class IBoat : MonoBehaviour {
 
         
 
-        bool thingy = (angleTwWind < angle);
-        //Debug.Log(thingy + " / " + (angledir>0) + " / " + (angleTwWind<angle));
+        bool angleTwWindSmallerThenAngle = (angleTwWind < angle);
 
         if (myangle < 180)
             angledir *= -1;
-        if ((vmgTowardsTarget > vmgUp || vmgTowardsTarget > vmgDown) && !thingy)
+        if ((vmgTowardsTarget > vmgUp || vmgTowardsTarget > vmgDown) && !angleTwWindSmallerThenAngle)
         {
             if (angledir < 0)
             {
@@ -170,26 +167,8 @@ public class IBoat : MonoBehaviour {
             }
         }
 
-
-
-        //float updiff = Mathf.Abs(vmgUp - vmg);
-        //float downdiff = Mathf.Abs(vmgDown - vmg);
-
-        //float minimumDiff = 0.1f;
-
-        //Debug.Log("vmgDown: " + vmgDown + " / vmg: " + vmg + " / vmgUp: " + vmgUp + " vmgTwTarget: " + vmgTowardsTarget + " / target angle: " + angle);
-        //if (prevVmg.Equals("vmg") && (vmgUp > vmg || vmgDown > vmg))
-        //{
-        //    //Debug.Break();
-        //}
-
         if (!_tacking)
         {
-            //if (Mathf.Approximately(vmgUp, vmg) || Mathf.Approximately(vmgDown, vmg))
-            //{
-            //    Debug.Log("Vmg (up || down) and vmg are the same so do nothing!");
-            //    prevVmg = "vmg";
-            //}
             if (vmg < vmgUp && vmgUp > vmgDown)// && updiff > minimumDiff)
             {
                 Quaternion rot = Quaternion.Lerp(this.transform.rotation,
@@ -244,7 +223,6 @@ public class IBoat : MonoBehaviour {
             }
         }
         _velocity = this.transform.up * _speed;
-        //Debug.Log("Velocity: " + _velocity);
         SailRotation();
     }
 
@@ -302,45 +280,6 @@ public class IBoat : MonoBehaviour {
             speed = Mathf.Lerp(_maxVelocity, _maxVelocity * 0.6f, (angleToWind - _bestWindAngle) / 50);
         speed = Mathf.Log(speed) * windSpeed;
         return speed;
-
-        //float currentSpeed = _velocity.magnitude;
-        //Debug.Log("Current Speed = " + currentSpeed);
-        //bool upwind = angleToWind < 90;
-
-        //float tw = windSpeed;
-        //float b = angleToWind;
-        //if (!upwind)
-        //    b = 180 - b;
-
-        //b *= Mathf.Deg2Rad;
-
-        //float twpow = Mathf.Pow(tw, 2);
-        //float cspow = Mathf.Pow(currentSpeed, 2);
-        //float twoWV = 2 * tw * currentSpeed;
-        //float cosb = Mathf.Cos(b);
-
-
-        //float aparantspeed = Mathf.Sqrt(twpow + cspow + twoWV * cosb);
-        ////Debug.Log("TW: " + windSpeed + " / AW: " + aparantspeed);
-        ////Debug.Log("Sqrt( " + twpow + " + " + cspow + " + " + twoWV + " * " + cosb + ") = " + aparantspeed);
-        //;
-        //float a = Mathf.Acos((tw * Mathf.Cos(b) + currentSpeed) / aparantspeed);
-        ////Debug.Log("TWº: " + (b * Mathf.Rad2Deg) + "/ AWº: " + (a * Mathf.Rad2Deg));
-
-        //float x = (Mathf.Sin(b) * Mathf.Cos(a)) / Mathf.Sin(a);
-        //x = Mathf.Cos(a) * aparantspeed;
-
-        ////Debug.Log("x: " + x + " / cos(b): " + Mathf.Cos(b));
-
-        //float bs;
-        //if (upwind)
-        //    bs = x - Mathf.Cos(b);
-        //else
-        //    bs = x + Mathf.Cos(b);
-
-
-        ////Debug.Log((b * Mathf.Rad2Deg) + " / " + bs);
-        //return bs;
 
     }
     
@@ -537,11 +476,7 @@ public class IBoat : MonoBehaviour {
         float overstaand = Mathf.Sin(tempangle * Mathf.Deg2Rad) * distance; //A
         float aanliggend = Mathf.Sqrt(Mathf.Pow(distance, 2) + Mathf.Pow(overstaand, 2));//B
 
-
-        //mypos = buoyPos - new Vector3(0, Mathf.Abs(buoyPos.y - this.transform.position.y));
-
         mypos = buoyPos - new Vector3(-overstaand, aanliggend * overstaandNegatief);
-        //Debug.Log(mypos + " to " + buoyPos);
 
 
         float c = Vector2.Distance(mypos, buoyPos);
