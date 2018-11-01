@@ -4,10 +4,13 @@ using UnityEngine;
 
 public static class ExperienceController {
 
-    const int BaseXP = 83;
+    const int BaseXP = 100;
     static float Multiplier = Mathf.Pow(2, 1f / 7f);
 
-	public static int GetExperienceForLevel(int level)
+    public const int ExperiencePerKm = 1;
+    public const int ExperiencePerRacePlace = 5;
+
+    public static int GetExperienceForLevel(int level)
     {
         if (level == 0)
             return BaseXP;

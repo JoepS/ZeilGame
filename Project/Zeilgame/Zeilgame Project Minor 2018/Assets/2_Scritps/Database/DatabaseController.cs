@@ -33,7 +33,7 @@ public class DatabaseController {
         go = GameObject.Find("StartupText");
 #if UNITY_EDITOR
         var dbPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName);
-        string connectionPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName.Replace(".db", "2.db"));
+        string connectionPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName.Replace(".db", ".db"));
         _connectionVersionCheck = new SQLiteConnection(connectionPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
 #else
         // check if file exists in Application.persistentDataPath
@@ -266,7 +266,7 @@ public class DatabaseController {
         if (removeColumns.Count > 0)
         {
             string query1 = "CREATE TEMPORARY TABLE table_backup (";
-            query1 += cvcTableMapping.FindColumnWithPropertyName("id").Name + " PRIMARY KEY, ";
+            query1 += cvcTableMapping.FindColumnWithPropertyName("id").Name + " PRIMARY KEY NOT NULL, ";
             foreach (TableMapping.Column c in cvcTableMapping.Columns)
             {
                 if(c.Name != "id")
@@ -285,11 +285,11 @@ public class DatabaseController {
             query2 = query2.Remove(query2.Length - 1);
             query2 += " from " + typeof(T).ToString();
             string query3 = "DROP TABLE " + typeof(T).ToString();
-            string query4 = "CREATE TABLE " + typeof(T).ToString() + "(id PRIMARY KEY, ";
+            string query4 = "CREATE TABLE \"" + typeof(T).ToString() + "\"('id' INTEGER PRIMARY KEY NOT NULL, ";
             foreach(TableMapping.Column c in cvcTableMapping.Columns)
             {
                 if(c.Name != "id")
-                    query4 += c.Name + ",";
+                    query4 += "'" + c.Name + "'" + GetDatabaseType(c.ColumnType.Name.ToString()) + ",";
             }
             query4 = query4.Remove(query4.Length - 1);
             query4 += ")";
@@ -354,7 +354,7 @@ public class DatabaseController {
         */
         //Boats
         UpdateTable<Achievement>(true);
-        UpdateTable<AchievementProperty>(true);
+        UpdateTable<Property>(true);
         UpdateTable<Boat>(true);
         UpdateTable<BoatRanking>(false);
         UpdateTable<Item>(true);
@@ -367,7 +367,7 @@ public class DatabaseController {
         UpdateTable<Sail>(true);
         UpdateTable<Track>(true);
         UpdateTable<Upgrade>(true);
-        //UpdateTable<Version>();
+        UpdateTable<Version>(true);
     }
 
     public string GetDatabaseType(string type)

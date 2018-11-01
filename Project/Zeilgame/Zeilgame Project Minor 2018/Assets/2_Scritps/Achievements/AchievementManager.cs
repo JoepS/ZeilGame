@@ -6,31 +6,26 @@ using System.Linq;
 public class AchievementManager : MonoBehaviour {
 
     List<Achievement> _achievements;
-    List<AchievementProperty> _properties;
+    List<Property> _properties;
 
 	// Use this for initialization
 	void Start () {
         _achievements = MainGameController.instance.databaseController.connection.Table<Achievement>().ToList();
-        foreach(Achievement a in _achievements)
-        {
-            Debug.Log(a);
-        }
-        _properties = MainGameController.instance.databaseController.connection.Table<AchievementProperty>().ToList();
+        _properties = MainGameController.instance.databaseController.connection.Table<Property>().ToList();
 	}
 
     void UnlockAchievement(Achievement a)
     {
         a.Unlocked = true;
         a.Hidden = false;
-
-        MainGameController.instance.popupManager.ViewPopup("Achivement Unlocked!\n" + a, null, 10);
+        MainGameController.instance.popupManager.ViewPopup("Achivement Unlocked!\n" + MainGameController.instance.localizationManager.GetLocalizedValue(a.Name), null, 10);
         a.Save();
     }
 
     public void AddAchievementProperty(AchievementProperties property, float amount)
     {
         int propertyId = (int)property;
-        AchievementProperty ap = _properties.Where(x => x.id.Equals(propertyId)).First();
+        Property ap = _properties.Where(x => x.id.Equals(propertyId)).First();
         ap.Value += amount;
         ap.Save();
         CheckForAchievementUnlocked();
@@ -38,9 +33,10 @@ public class AchievementManager : MonoBehaviour {
 
     public void CheckForAchievementUnlocked()
     {
+        Reset();
         foreach(Achievement a in _achievements.Where(x=>!x.Unlocked))
         {
-            List<AchievementProperty> properties = a.GetProperties();
+            List<Property> properties = a.GetProperties();
             List<float> propertiesAmount = a.GetPropertiesAmount();
             bool unlocked = true;
             for (int i = 0; i < properties.Count; i++)
@@ -60,7 +56,7 @@ public class AchievementManager : MonoBehaviour {
     public void Reset()
     {
         _achievements = MainGameController.instance.databaseController.connection.Table<Achievement>().ToList();
-        _properties = MainGameController.instance.databaseController.connection.Table<AchievementProperty>().ToList();
+        _properties = MainGameController.instance.databaseController.connection.Table<Property>().ToList();
     }
 }
 
