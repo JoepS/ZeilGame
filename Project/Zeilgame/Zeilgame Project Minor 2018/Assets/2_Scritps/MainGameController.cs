@@ -63,6 +63,7 @@ public class MainGameController : MonoBehaviour {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
             _databaseController = new DatabaseController("DB.db");
+            achievementManager.Reset();
             if (_databaseController.connection.Table<Player>().Count() > 0)
             {
 
@@ -83,10 +84,6 @@ public class MainGameController : MonoBehaviour {
                 _sceneController.LoadScene(StartMenuSceneName, false);
             else if (!_sceneController.OneSceneBack())
                 CloseGame();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _player.AddExperience(1000);
         }
 	}
 

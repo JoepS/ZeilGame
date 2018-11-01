@@ -17,6 +17,7 @@ public class VillageSceneController : MonoBehaviour {
     const string RankingsSceneName = "RankingsScene";
     const string ItemShopSceneName = "ItemShopScene";
     const string AchievementsSceneName = "AchievementScene";
+    const string PlayerProfileSceneName = "PlayerProfileScene";
 
     // Use this for initialization
     void Start() {
@@ -86,5 +87,10 @@ public class VillageSceneController : MonoBehaviour {
     public void OnAchivementsButtonClick()
     {
         MainGameController.instance.sceneController.LoadScene(AchievementsSceneName);
+    }
+
+    public void OnPlayerProfileButtonClick()
+    {
+        MainGameController.instance.sceneController.LoadScene(PlayerProfileSceneName);
     }
 }

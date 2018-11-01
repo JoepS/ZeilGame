@@ -64,7 +64,7 @@ public class RankingSceneController : MonoBehaviour {
         else
         {
             List<Person> persons = MainGameController.instance.databaseController.connection.Table<Person>().ToList();
-            persons = persons.OrderBy(x => x.LifetimePoints).ThenBy(x => x.RacesWon).ToList();
+            persons = persons.OrderBy(x => x.LifetimePoints).ThenBy(x => x.RacesWon).Where(x => x.LifetimePoints > 0).ToList();
             foreach (Person p in persons)
             {
                 GameObject rankingPanel = GameObject.Instantiate(_rankingPanel);

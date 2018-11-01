@@ -374,6 +374,7 @@ void Start () {
                 if(br == null)
                 {
                     br = new BoatRanking();
+                    br.id = MainGameController.instance.databaseController.connection.Table<BoatRanking>().Count() + 1;
                     br.BoatId = ora.person.BoatId;
                     br.PersonId = ora.person.id;
                     br.New();
@@ -400,6 +401,8 @@ void Start () {
                 if(br == null)
                 {
                     br = new BoatRanking();
+                    br.id = MainGameController.instance.databaseController.connection.Table<BoatRanking>().Count() + 1;
+                    Debug.Log(br.id);
                     br.PersonId = player.id;
                     br.BoatId = player.GetActiveBoat().id;
                     br.New();
@@ -413,6 +416,7 @@ void Start () {
                     person.RacesWon++;
                     br.RacesWon++;
                 }
+                player.AddExperience(ExperienceController.ExperiencePerRacePlace * ((_opponenents.Count - i + 2)));
                 br.Points += points;
                 person.LifetimePoints += points;
                 br.Save();

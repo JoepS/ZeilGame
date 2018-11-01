@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 
-[Table("AchievementProperty")]
-public class AchievementProperty : Model {
+[Table("Property")]
+public class Property : Model {
     public string Name { get; set; }
     public float Value { get; set; }
 
@@ -21,7 +21,7 @@ public class AchievementProperty : Model {
 
     public override void Copy(Model m)
     {
-        AchievementProperty ap = (AchievementProperty)m;
+        Property ap = (Property)m;
         this.Name = ap.Name;
     }
 }

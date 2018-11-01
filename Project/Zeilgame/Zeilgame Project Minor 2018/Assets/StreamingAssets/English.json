@@ -209,10 +209,10 @@
 		"value": "Distance Sailed"
 	}, {
 		"key": "achievement_property_distance",
-		"value": "Distance"
+		"value": "Distance Sailed"
 	}, {
 		"key": "achievement_property_races",
-		"value": "Races"
+		"value": "Races Sailed"
 	}, {
 		"key": "achievement_property_races_won",
 		"value": "Races Won"
@@ -240,5 +240,17 @@
 	},{
 		"key": "sure_to_reset_text",
 		"value": "Are you sure you want to delete all your game progress?"
+	},{
+		"key": "level_text",
+		"value": "Level:"
+	},{
+		"key": "experience_text",
+		"value": "Experience til next level:"
+	},{
+		"key": "total_experience_text",
+		"value": "Total Experience:"
+	},{
+		"key": "player_stats_text",
+		"value": "Player Statistics:"
 	}]
 }

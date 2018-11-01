@@ -139,7 +139,7 @@ public class OptionsSceneController : MonoBehaviour {
             a.Reset();
         }
         //Reset AchievementProperties
-        foreach(AchievementProperty ap in MainGameController.instance.databaseController.connection.Table<AchievementProperty>().ToList())
+        foreach(Property ap in MainGameController.instance.databaseController.connection.Table<Property>().ToList())
         {
             ap.Reset();
         }

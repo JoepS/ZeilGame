@@ -19,10 +19,10 @@ public class Achievement : Model {
         return id + " / " + Name + " / " + Description + " / " + Hidden + " / " + Unlocked + " / " + Property + " / " + PropertyAmount;
     }
 
-    public List<AchievementProperty> GetProperties()
+    public List<Property> GetProperties()
     {
         ListInt temp = JsonUtility.FromJson<ListInt>(Property);
-        List<AchievementProperty> achievementProperty = MainGameController.instance.databaseController.connection.Table<AchievementProperty>().Where(x => temp.list.Contains(x.id)).ToList();
+        List<Property> achievementProperty = MainGameController.instance.databaseController.connection.Table<Property>().Where(x => temp.list.Contains(x.id)).ToList();
         return achievementProperty;
     }
 

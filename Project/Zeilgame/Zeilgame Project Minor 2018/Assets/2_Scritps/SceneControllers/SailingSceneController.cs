@@ -187,10 +187,19 @@ public class SailingSceneController : MonoBehaviour
 
     IEnumerator movement()
     {
+        float distanceSailed = 0;
         while (_isMoving)
         {
             float distance = _currentSpeed / 3600;
             MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.Distance, distance);
+            distanceSailed += distance;
+            if (distanceSailed >= 1)
+            {
+                int multiple = (int)distanceSailed / 1;
+                Debug.Log(multiple);
+                MainGameController.instance.player.AddExperience(ExperienceController.ExperiencePerKm * multiple);
+                distanceSailed -= multiple;
+            }
             float distanceLeft = _route.GetDistanceLeft() - distance;
             if (distanceLeft <= 0)
             {
