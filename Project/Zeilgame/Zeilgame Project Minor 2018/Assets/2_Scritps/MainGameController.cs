@@ -106,6 +106,27 @@ public class MainGameController : MonoBehaviour {
         return dstMin + (val - srcMin) / (srcMax - srcMin) * (dstMax - dstMin);
     }
 
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            if (_player != null)
+            {
+                _player.LastInGame = JsonUtility.ToJson((JsonDateTime)DateTime.Now);
+                _player.Save();
+            }
+            #if !UNITY_EDITOR
+                    _databaseController.EncryptDB();
+            #endif
+        }
+        else
+        {
+#if !UNITY_EDITOR
+            _databaseController.DecryptDB();
+#endif
+        }
+    }
+
     private void OnApplicationQuit()
     {
         if (_player != null)

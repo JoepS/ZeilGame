@@ -27,6 +27,8 @@ public class DatabaseController {
 
     GameObject go;
 
+    string _filePath;
+
     public DatabaseController(string DatabaseName)
     {
 
@@ -81,11 +83,13 @@ public class DatabaseController {
                 File.WriteAllBytes(tempFilepath, loadDb.bytes);
                 _connectionVersionCheck = new SQLiteConnection(tempFilepath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
                 go.GetComponent<Text>().text += "Created new Connection check database!\n";
+                
             //}
             //catch (Exception e)
             //{
             //    go.GetComponent<Text>().text += e.Message + "\n Path DB.db: " + filepath + "\n Path DB2.db: " + tempFilepath;
             //}
+            _filePath = filepath;
             //try
             //{
                 DecryptDB(filepath);
@@ -149,6 +153,11 @@ public class DatabaseController {
             File.Delete(_connectionVersionCheck.DatabasePath);
 #endif
         }
+    }
+
+    public void DecryptDB()
+    {
+        DecryptDB(_filePath);
     }
 
     public void DecryptDB(string dbPath)
