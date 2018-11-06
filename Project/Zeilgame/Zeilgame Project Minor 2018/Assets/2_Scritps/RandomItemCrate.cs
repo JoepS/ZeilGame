@@ -34,7 +34,8 @@ public class RandomItemCrate : MonoBehaviour, IPointerDownHandler{
             Vector2 size = seaBlockToFollow.GetComponent<RectTransform>().sizeDelta;
             float height = (size.y / 2);// - (Screen.height / 2);// _seaBlockToFollow.GetComponent<RectTransform>().position.y +
 
-            Vector2 pos = seaBlockToFollow.transform.localPosition;
+            Vector3 pos = seaBlockToFollow.transform.localPosition;
+            pos.z = 1;
             pos.y = height + heightOffset;
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, pos, Time.deltaTime * 50);
             if (Mathf.Abs(this.transform.localPosition.x - pos.x) < 0.1f) 

@@ -90,14 +90,14 @@ public class DatabaseController {
             //    go.GetComponent<Text>().text += e.Message + "\n Path DB.db: " + filepath + "\n Path DB2.db: " + tempFilepath;
             //}
             _filePath = filepath;
-            //try
-            //{
+            try
+            {
                 DecryptDB(filepath);
-            //}
-            //catch(Exception e)
-            //{
-            //    go.GetComponent<Text>().text += "Decription error: " + e.Message + "\n" + filepath + "\n";
-            //}
+            }
+            catch(Exception e)
+            {
+                Debug.LogWarning("Decription error: " + e.Message + "\n" + filepath + "\n");
+            }
 #endif
         }
         var dbPath = filepath;

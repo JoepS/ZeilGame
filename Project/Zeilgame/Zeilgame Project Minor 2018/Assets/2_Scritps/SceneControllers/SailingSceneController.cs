@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class SailingSceneController : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class SailingSceneController : MonoBehaviour
     {
         if (MainGameController.instance == null)
             return;
+        /*
         if (MainGameController.instance.sceneController.StackCount() > 0)
         {
             while (MainGameController.instance.sceneController.StackCount() > 0)
@@ -75,7 +77,7 @@ public class SailingSceneController : MonoBehaviour
                 }
 
             }
-        }
+        }*/
     }
 
     // Use this for initialization
@@ -249,7 +251,7 @@ public class SailingSceneController : MonoBehaviour
     {
         float middley = _seaMovement.GetMiddleBlockHeight();
         float middleTOy = _seaMovement.GetMiddleToOneBlockHeight();
-        Vector2 pos = _boatImage.transform.localPosition;
+        Vector3 pos = _boatImage.transform.localPosition;
         pos.y = middley - ((_boatImage.GetComponent<RectTransform>().sizeDelta.y / 4));// - (Screen.height / 2);
         _boatImage.transform.localPosition = pos;
 
@@ -269,7 +271,7 @@ public class SailingSceneController : MonoBehaviour
         MainGameController.instance.player.SetLastInGame(JsonUtility.ToJson((JsonDateTime)DateTime.Now));
         MainGameController.instance.player.Save();
         MainGameController.instance.canGoBack = true;
-        MainGameController.instance.sceneController.LoadScene(MapSceneName, _route, false);
+        MainGameController.instance.sceneController.LoadScene(MapSceneName, true, LoadSceneMode.Additive);
     }
 
     public void UpdateInfoPanels()

@@ -48,9 +48,30 @@ public class SceneController : MonoBehaviour {
         SceneManager.LoadScene(name);
     }
 
+    public void LoadScene(string name, bool OnStack, LoadSceneMode loadSceneMode, params object[] objects)
+    {
+        if (OnStack)
+        {
+            _sceneStack.Push(SceneManager.GetActiveScene().name);
+        }
+        foreach (object o in objects)
+            _objectStack.Push(o);
+        if(loadSceneMode == LoadSceneMode.Additive)
+            _sceneStack.Push(name);
+
+        SceneManager.LoadScene(name, loadSceneMode);
+    }
+
     public bool OneSceneBack()
     {
-        if(_sceneStack.Count > 0)
+        if(SceneManager.sceneCount >= 2)
+        {
+            string addativeScene = _sceneStack.Pop();
+            string originalScene = _sceneStack.Pop(); //not used
+            SceneManager.UnloadSceneAsync(addativeScene);
+            return true;
+        }
+        else if(_sceneStack.Count > 0)
         {
             SceneManager.LoadScene(_sceneStack.Pop());
             return true;

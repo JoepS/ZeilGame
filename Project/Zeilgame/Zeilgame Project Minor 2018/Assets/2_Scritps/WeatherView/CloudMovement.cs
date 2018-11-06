@@ -5,7 +5,8 @@ using System.Linq;
 
 public class CloudMovement : MonoBehaviour {
 
-    [SerializeField] GameObject _cloudSet;
+    [SerializeField] GameObject _cloudSetRain;
+    [SerializeField] GameObject _cloudSetSnow;
 
     List<GameObject> _cloudsPool;
 
@@ -13,6 +14,12 @@ public class CloudMovement : MonoBehaviour {
     public bool SpawnClouds { set { _spawnClouds = value; } }
     [SerializeField] float _frequency;
     public float Frequency { set { _frequency = value; } }
+
+    bool _snow;
+
+    int _rainAmount;
+
+    [SerializeField] Blink _thunderBlink;
 
 	// Use this for initialization
 	void Start () {
@@ -24,10 +31,12 @@ public class CloudMovement : MonoBehaviour {
 
 	}
 
-    public void SpawningClouds(bool value, float frequency)
+    public void SpawningClouds(bool value, float frequency, int rainAmount, bool snow)
     {
+        _snow = snow;
         _frequency = frequency;
         _spawnClouds = value;
+        _rainAmount = rainAmount;
         if (value)
             StartCoroutine(SpawnCloud());
         else
@@ -39,19 +48,32 @@ public class CloudMovement : MonoBehaviour {
         while (_spawnClouds)
         {
             GameObject cloud = GetAvaliableCloud();
-            cloud.GetComponent<Cloud>().Moving(true);
+            Debug.Log("Rain amount: " + _rainAmount);
+            cloud.GetComponent<Cloud>().Moving(true, _rainAmount, _thunderBlink);
             yield return new WaitForSeconds(100 / (_frequency + 1));
         }
     }
 
     GameObject GetAvaliableCloud()
     {
-        GameObject cloud = _cloudsPool.Where(x => !x.activeSelf).FirstOrDefault();
+        string type = "Rain";
+        if (_snow)
+            type = "Snow";
+        GameObject cloud = _cloudsPool.Where(x => !x.activeSelf && x.name.Contains(type)).FirstOrDefault();
         if(cloud == null)
         {
-            cloud = GameObject.Instantiate(_cloudSet, this.transform);
+            if (!_snow)
+            {
+                cloud = GameObject.Instantiate(_cloudSetRain, this.transform);
+                cloud.GetComponent<Cloud>().Speed = 100f;
+            }
+            else
+            {
+                cloud = GameObject.Instantiate(_cloudSetSnow, this.transform);
+                cloud.GetComponent<Cloud>().Speed = 50f;
+            }
             cloud.transform.localScale = Vector3.one;
-            cloud.transform.localPosition = new Vector3(-(Screen.width/2) - cloud.GetComponent<RectTransform>().rect.width/2, 0, 0);
+            cloud.transform.localPosition = new Vector3((Screen.width/2) + cloud.GetComponent<RectTransform>().rect.width/2, 0, -1);
             cloud.SetActive(true);
             _cloudsPool.Add(cloud);
         }
