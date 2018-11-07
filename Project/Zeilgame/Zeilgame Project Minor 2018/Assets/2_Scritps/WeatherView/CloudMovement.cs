@@ -48,7 +48,6 @@ public class CloudMovement : MonoBehaviour {
         while (_spawnClouds)
         {
             GameObject cloud = GetAvaliableCloud();
-            Debug.Log("Rain amount: " + _rainAmount);
             cloud.GetComponent<Cloud>().Moving(true, _rainAmount, _thunderBlink);
             yield return new WaitForSeconds(100 / (_frequency + 1));
         }

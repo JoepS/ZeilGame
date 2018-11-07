@@ -23,7 +23,7 @@ public class SunMoonDial : MonoBehaviour {
             now = DateTime.Now;
             Int32 unixTimestamp = (Int32)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             float angle = MainGameController.Map(unixTimestamp, DayNightAffected._sunrise, DayNightAffected._sunset, 90, 270);
-            this.transform.localEulerAngles = new Vector3(0, 0, angle);
+            this.transform.localEulerAngles = Vector3.Lerp(this.transform.localEulerAngles, new Vector3(0, 0, angle), Time.deltaTime);
         }
 	}
 }

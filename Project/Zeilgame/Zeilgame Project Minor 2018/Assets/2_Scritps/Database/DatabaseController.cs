@@ -160,9 +160,9 @@ public class DatabaseController {
         DecryptDB(_filePath);
     }
 
-    public void DecryptDB(string dbPath)
+    public bool DecryptDB(string dbPath)
     {
-
+        return true;
         byte[] key = Encoding.UTF8.GetBytes(EncryptionKey);
         byte[] iv = Encoding.UTF8.GetBytes(EncryptionIv);
 
@@ -177,10 +177,12 @@ public class DatabaseController {
         }
 
         File.WriteAllBytes(dbPath, decMessage);
+        return true;
     }
 
     public bool EncryptDB()
     {
+        return true;
         _connection.Close();
         string dbPath = _connection.DatabasePath;
         _connection = null;
@@ -395,6 +397,11 @@ public class DatabaseController {
                 Debug.LogWarning("Didnt recognize this type: " + type);
                 return DBTypes.TEXT.ToString();
         }
+    }
+
+    public override string ToString()
+    {
+        return "DatabaseController: " + _connection;
     }
 
     enum DBTypes

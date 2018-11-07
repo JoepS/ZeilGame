@@ -125,10 +125,8 @@ public class Boat : Model {
         {
             hullLengthModifier *= u.SpeedModifier;
         }
-        foreach(Sail s in GetSails())
-        {
-            hullLengthModifier *= s.SpeedModifier;
-        }
+        Sail s = GetSails().Where(x => x.Active).First();
+        hullLengthModifier *= s.SpeedModifier;
         return HullLength * hullLengthModifier;
     }
 

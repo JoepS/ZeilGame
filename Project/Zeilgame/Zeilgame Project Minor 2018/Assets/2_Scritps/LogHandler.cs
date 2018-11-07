@@ -21,7 +21,7 @@ public class LogHandler : MonoBehaviour {
     {
         output = logString;
         if(type == LogType.Error || type == LogType.Exception)
-            MainGameController.instance.popupManager.ViewPopup(output + " / " + stackTrace, null, 5);
+            MainGameController.instance.popupManager.ViewPopup(output + " / " + stackTrace, null, 10);
         stack = stackTrace;
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class SelectLocationSceneController : MonoBehaviour {
 
     const string TutorialSceneName = "TutorialScene";
-    const int BeginningGold = 20;
+    const int BeginningGold = 500;
 
     [SerializeField] InputField _nameInputField;
     [SerializeField] Dropdown _locationDropdown;

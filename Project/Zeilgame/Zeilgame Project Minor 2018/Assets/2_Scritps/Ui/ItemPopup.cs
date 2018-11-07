@@ -20,7 +20,7 @@ public class ItemPopup : MonoBehaviour {
 	void Update () {
         if (_moveItemPopup)
         {
-            Vector2 pos = this.transform.localPosition;
+            Vector3 pos = this.transform.localPosition;
             pos.y += 10;
             pos.x = pos.x + Mathf.Cos(pos.y / 100) * 10;
             this.transform.localPosition = pos;

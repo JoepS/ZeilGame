@@ -49,16 +49,13 @@ public class Player : Model {
 
     public Boat GetActiveBoat()
     {
-        if (_boat == null)
+        try
         {
-            try
-            {
-                _boat = MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.Active).First();
-            }
-            catch
-            {
-                _boat = null;
-            }
+            _boat = MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.Active).First();
+        }
+        catch
+        {
+            _boat = null;
         }
         return _boat;
     }

@@ -29,7 +29,7 @@ public class Cloud : MonoBehaviour {
             this.transform.localPosition -= new Vector3(_speed * Time.deltaTime, 0, 0);
             if (this.transform.localPosition.x <= -((Screen.width/2) + (_width/2)))
             {
-                this.transform.localPosition = new Vector3((Screen.width/2) + _width, 0, 0);
+                this.transform.localPosition = new Vector3((Screen.width/2) + (_width / 2), 0, -1);
                 this.Moving(false, 0, _thunderBlink);
                 //_moving = false;
             }

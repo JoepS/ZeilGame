@@ -80,7 +80,7 @@ public class MainGameController : MonoBehaviour {
 	void Update () {
         if (Input.GetAxis("Cancel") > 0)
         {
-            if (!canGoBack)
+            if (!canGoBack && !SceneManager.GetActiveScene().name.Equals(StartMenuSceneName))
                 _sceneController.LoadScene(StartMenuSceneName, false);
             else if (!_sceneController.OneSceneBack())
                 CloseGame();
@@ -106,6 +106,27 @@ public class MainGameController : MonoBehaviour {
         return dstMin + (val - srcMin) / (srcMax - srcMin) * (dstMax - dstMin);
     }
 
+   /* private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            if (_player != null)
+            {
+                _player.LastInGame = JsonUtility.ToJson((JsonDateTime)DateTime.Now);
+                _databaseController.connection.Update(_player);
+            }
+#if !UNITY_EDITOR
+                    _databaseController.EncryptDB();
+#endif
+        }
+        else
+        {
+#if !UNITY_EDITOR
+            _databaseController.DecryptDB();
+#endif
+        }
+    }*/
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -113,10 +134,22 @@ public class MainGameController : MonoBehaviour {
             if (_player != null)
             {
                 _player.LastInGame = JsonUtility.ToJson((JsonDateTime)DateTime.Now);
-                _player.Save();
+                try
+                {
+                    _databaseController.connection.Update(_player);
+                }
+                catch
+                {
+                    Debug.LogError("Cant save player?");
+                }
             }
             #if !UNITY_EDITOR
-                    _databaseController.EncryptDB();
+            try{
+                 _databaseController.EncryptDB();
+            }
+            catch{
+                Debug.LogError("Cant encrypt DB?");
+            }
             #endif
         }
         else
