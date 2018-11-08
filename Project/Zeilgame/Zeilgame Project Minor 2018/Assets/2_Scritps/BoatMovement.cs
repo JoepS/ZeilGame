@@ -20,8 +20,10 @@ public class BoatMovement : IBoat {
         {
             _simpleOrAdvancedSetting = false;
         }
+        _tackingExtra = 0f;
         _boat = MainGameController.instance.player.GetActiveBoat();
         _hullSpeed = _boat.GetSpeedModified();
+        Debug.Log("NogoZoneLimit: " + _boat.GetNGZLimit() + " / " + _boat.GetNGZLimitModified());
         _ngzLimit = _boat.GetNGZLimitModified();
         _tempLineRenderer = this.GetComponent<LineRenderer>();
     }

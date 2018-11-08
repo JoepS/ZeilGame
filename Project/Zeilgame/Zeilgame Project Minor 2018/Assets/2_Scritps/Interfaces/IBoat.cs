@@ -90,7 +90,7 @@ public class IBoat : MonoBehaviour {
         Vector3 relativePos = _target.transform.position - this.transform.position;
         float angle = Vector2.Angle(this.transform.up, relativePos);
 
-        _rotationSpeed = 10;// MainGameController.Map(angle, 0, 180, 1, 20);
+        _rotationSpeed = MainGameController.Map(angle, 0, 180, 1, 20);
 
         float myangle = GetAngleTwWind();
         _upwindTarget = this.transform.position.y < _target.transform.position.y ? true : false;

@@ -37,7 +37,7 @@ public class PlayerProfileSceneController : MonoBehaviour {
     {
         GameObject pp = GameObject.Instantiate(_propertiesPanelPrefab, _propertiesContent.transform);
         pp.transform.localScale = Vector3.one;
-        pp.GetComponent<PropertyPanel>().SetData(p);
+        pp.GetComponent<PropertyPanel>().SetData(p.Name, p.Value);
 
     }
 

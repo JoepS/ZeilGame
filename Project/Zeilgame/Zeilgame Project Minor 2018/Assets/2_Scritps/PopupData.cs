@@ -22,5 +22,6 @@ public class PopupData  {
         _text = text;
         _image = image;
         _viewTime = viewTime;
+        _remainingTime = viewTime;
     }
 }

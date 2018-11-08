@@ -67,6 +67,21 @@
 		"key": "boat_text",
 		"value": "Boat"
 	}, {
+		"key": "upgrade_text",
+		"value": "Upgrade"
+	}, {
+		"key": "sail_text",
+		"value": "Sail"
+	}, {
+		"key": "item_text",
+		"value": "Item"
+	}, {
+		"key": "location_text",
+		"value": "Location"
+	}, {
+		"key": "race_text",
+		"value": "Race"
+	}, {
 		"key": "choose_route_text",
 		"value": "Choose route"
 	}, {
@@ -252,5 +267,32 @@
 	},{
 		"key": "player_stats_text",
 		"value": "Player Statistics:"
+	},{
+		"key": "request_property_deliver",
+		"value": "Deliver Boat"
+	},{
+		"key": "request_property_win_race",
+		"value": "Win Race"
+	},{
+		"key": "request_property_deliver_person",
+		"value": "Deliver Person"
+	},{
+		"key": "request_property_destination_time",
+		"value": "Destination Time"
+	},{
+		"key": "request_property_pickup_item",
+		"value": "Pickup Item"
+	}, {
+		"key": "request_deliver_boat_name",
+		"value": "Deliver boat"
+	}, {
+		"key": "request_race_boat_name",
+		"value": "Race with boat"
+	}, {
+		"key": "request_deliver_boat_description",
+		"value": "Deliver this boat at the indicated location"
+	}, {
+		"key": "request_race_boat_description",
+		"value": "Race the indicated race with this boat"
 	}]
 }

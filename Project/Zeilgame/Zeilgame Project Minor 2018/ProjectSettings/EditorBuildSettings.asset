@@ -62,4 +62,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1_Scenes/PlayerProfileScene.unity
     guid: 6786d181d5ffee1429528445d35eca7c
+  - enabled: 1
+    path: Assets/1_Scenes/RequestScene.unity
+    guid: bfb3e66681c67a94ca745661ed058cb3
   m_configObjects: {}

@@ -62,7 +62,7 @@ public class LocalizationManager : MonoBehaviour
 
     public string GetLocalizedValue(string key)
     {
-        string result = missingTextString;
+        string result = missingTextString + "/" + key;
         if (localizedText.ContainsKey(key))
         {
             result = localizedText[key];

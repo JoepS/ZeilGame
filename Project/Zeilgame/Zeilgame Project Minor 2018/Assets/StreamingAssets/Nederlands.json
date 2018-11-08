@@ -67,6 +67,21 @@
 		"key": "boat_text",
 		"value": "Boot"
 	}, {
+		"key": "upgrade_text",
+		"value": "Upgrade"
+	}, {
+		"key": "sail_text",
+		"value": "Zeil"
+	}, {
+		"key": "item_text",
+		"value": "Item"
+	}, {
+		"key": "location_text",
+		"value": "Locatie"
+	}, {
+		"key": "race_text",
+		"value": "Race"
+	}, {
 		"key": "choose_route_text",
 		"value": "Kies route"
 	}, {
@@ -252,5 +267,17 @@
 	},{
 		"key": "player_stats_text",
 		"value": "Speler Statistieken:"
+	}, {
+		"key": "request_deliver_boat_name",
+		"value": "Lever boot af"
+	}, {
+		"key": "request_race_boat_name",
+		"value": "Race met boot"
+	}, {
+		"key": "request_deliver_boat_description",
+		"value": "Lever deze boot af op de aangegeven locatie"
+	}, {
+		"key": "request_race_boat_description",
+		"value": "Race de aangegeven race met deze boot"
 	}]
 }

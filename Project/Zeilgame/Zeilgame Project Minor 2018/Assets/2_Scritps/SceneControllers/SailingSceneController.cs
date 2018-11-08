@@ -198,7 +198,6 @@ public class SailingSceneController : MonoBehaviour
             if (distanceSailed >= 1)
             {
                 int multiple = (int)distanceSailed / 1;
-                Debug.Log(multiple);
                 MainGameController.instance.player.AddExperience(ExperienceController.ExperiencePerKm * multiple);
                 distanceSailed -= multiple;
             }
@@ -296,6 +295,8 @@ public class SailingSceneController : MonoBehaviour
         MainGameController.instance.player.CurrentLocation = arrivalLocation.id;
         MainGameController.instance.player.setCurrentLocationLatLon(arrivalLocation.GetLocation());
         MainGameController.instance.player.CurrentRoute = -1;
+
+        RequestManager.UpdateRequest(MainGameController.instance.player.GetActiveBoat(), arrivalLocation);
 
         _arrivedPanel.SetActive(true);
     }

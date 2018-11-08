@@ -76,6 +76,7 @@ public class Player : Model {
     {
         Level++;
         Experience = 0;
+        MainGameController.instance.popupManager.ViewPopup("You leveled up!\n You are now level " + Level, null, 10);
         Debug.LogWarning("You Leveled up!\nYou are now level " + Level);
     }
 

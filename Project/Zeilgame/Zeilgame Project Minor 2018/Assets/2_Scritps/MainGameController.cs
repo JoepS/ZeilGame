@@ -85,6 +85,11 @@ public class MainGameController : MonoBehaviour {
             else if (!_sceneController.OneSceneBack())
                 CloseGame();
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _player.AddExperience(ExperienceController.GetExperienceForLevel(_player.Level));
+        }
 	}
 
     public void CloseGame()
@@ -187,6 +192,12 @@ public struct JsonDateTime
         jdt.value = dt.ToFileTimeUtc();
         return jdt;
     }
+}
+
+[Serializable]
+public class ListString
+{
+    public List<string> list;
 }
 
 [Serializable]

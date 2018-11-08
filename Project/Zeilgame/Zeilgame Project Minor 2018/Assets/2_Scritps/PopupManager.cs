@@ -67,7 +67,6 @@ public class PopupManager : MonoBehaviour {
     void CreatePopup(PopupData data)
     {
         GameObject popup = data.assignedToGameObject;
-
         if(popup == null)
             popup = GameObject.Instantiate(_popupPrefab);
         popup.transform.SetParent(_popupPanelParent.transform);
