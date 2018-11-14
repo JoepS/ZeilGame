@@ -110,12 +110,11 @@ public class RepairShopController : MonoBehaviour {
 
     public void RepairDamage(float amountPercent)
     {
-        float cost = _boatToRepair.Price * amountPercent;
+        int cost = Mathf.RoundToInt(_boatToRepair.Price * amountPercent);
 
         if (MainGameController.instance.player.Gold >= cost)
         {
-            MainGameController.instance.player.Gold -= cost;
-            MainGameController.instance.player.Save();
+            MainGameController.instance.player.GiveGold(-cost);
             _boatToRepair.Damage -= _boatToRepair.GetMaxDamage() * amountPercent;
             if (_boatToRepair.Damage <= 0)
                 _boatToRepair.Damage = 0;

@@ -233,10 +233,9 @@ void Start () {
                 _finishedRace = true;
                 _finishOrder.Add(_playerBoat);
                 _finishPlaceText.text = "" + _finishOrder.Count;
-                float gold = (_opponenents.Count - _finishOrder.Count + 2) * 10 ;
+                int gold = (_opponenents.Count - _finishOrder.Count + 2) * 10 ;
                 _goldReceivedText.text = string.Format(MainGameController.instance.localizationManager.GetLocalizedValue("finished_race_gold_text"), gold);
-                MainGameController.instance.player.Gold += gold;
-                MainGameController.instance.player.Save();
+                MainGameController.instance.player.GiveGold(gold);
             }
             else
             {
@@ -413,6 +412,7 @@ void Start () {
                 if (points == 0.9f)
                 {
                     MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.RacesWon, 1);
+                    RequestManager.UpdateRequest(MainGameController.instance.player.GetActiveBoat(), _currentRace);
                     person.RacesWon++;
                     br.RacesWon++;
                 }

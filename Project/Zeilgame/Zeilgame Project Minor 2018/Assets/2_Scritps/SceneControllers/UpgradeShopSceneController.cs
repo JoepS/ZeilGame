@@ -18,12 +18,17 @@ public class UpgradeShopSceneController : MonoBehaviour
     void Start()
     {
         _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
-        List<int> ids = MainGameController.instance.player.GetActiveBoat().GetUpgradesId();
-        List<Upgrade> upgrades = MainGameController.instance.databaseController.connection.Table<Upgrade>().Where(x => ids.Contains(x.id)).ToList();
+        List<Upgrade> upgrades = GetUpgradesListCurBoat();
         foreach (Upgrade u in upgrades)
         {
             _upgradeBuyPanels.Add(CreateUpgradeBuyPanel(u));
         }
+    }
+
+    public List<Upgrade> GetUpgradesListCurBoat()
+    {
+        List<int> ids = MainGameController.instance.player.GetActiveBoat().GetUpgradesId();
+        return MainGameController.instance.databaseController.connection.Table<Upgrade>().Where(x => ids.Contains(x.id)).ToList();
     }
 
     public void BuyUpgrade(Upgrade u)
@@ -33,7 +38,7 @@ public class UpgradeShopSceneController : MonoBehaviour
             u.Bought = true;
             u.Save();
             UpdateUpgradeBuyPanels();
-            MainGameController.instance.player.Gold -= u.Price;
+            MainGameController.instance.player.GiveGold(-u.Price);
             MainGameController.instance.player.Save();
             _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
         }
@@ -45,7 +50,7 @@ public class UpgradeShopSceneController : MonoBehaviour
 
     public void UpdateUpgradeBuyPanels()
     {
-        List<Upgrade> upgrades = MainGameController.instance.databaseController.connection.Table<Upgrade>().ToList();
+        List<Upgrade> upgrades = GetUpgradesListCurBoat();
         for (int i = 0; i < upgrades.Count; i++)
         {
             _upgradeBuyPanels[i].SetData(upgrades[i], this);

@@ -142,6 +142,7 @@ public class DatabaseController {
         {
             Debug.LogError(e.Message + " \n " + _connectionVersionCheck + "\n It throws an error here?");
         }
+        go.GetComponent<Text>().text += "\n Current Version " + versionId + " / New Version " + newDbId;
         //als versie verouderd is
         if (newDbId > versionId)
         {
@@ -379,6 +380,8 @@ public class DatabaseController {
         UpdateTable<Track>(true);
         UpdateTable<Upgrade>(true);
         UpdateTable<Version>(true);
+        UpdateTable<Request>(true);
+        UpdateTable<RequestProperty>(true);
     }
 
     public string GetDatabaseType(string type)

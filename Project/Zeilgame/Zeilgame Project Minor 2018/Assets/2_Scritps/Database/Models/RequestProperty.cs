@@ -65,18 +65,18 @@ public class PropertyValue
         {
             case "boat":
                 int id = (int)(dictionary[key]);
-                return MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.id == id).First().Name;
+                return id;// MainGameController.instance.databaseController.connection.Table<Boat>().Where(x => x.id == id).First().Name;
             case "location":
                 int idL = (int)(dictionary[key]);
-                return MainGameController.instance.databaseController.connection.Table<Location>().Where(x => x.id == idL).First().Name;
+                return idL;//MainGameController.instance.databaseController.connection.Table<Location>().Where(x => x.id == idL).First().Name;
             case "time":
                 return dictionary[key];
             case "item":
                 int idI = (int)(dictionary[key]);
-                return MainGameController.instance.databaseController.connection.Table<Item>().Where(x => x.id == idI).First().Name;
+                return idI;//MainGameController.instance.databaseController.connection.Table<Item>().Where(x => x.id == idI).First().Name;
             case "race":
                 int idR = (int)(dictionary[key]);
-                return MainGameController.instance.databaseController.connection.Table<Race>().Where(x => x.id == idR).First().Name;
+                return idR;//MainGameController.instance.databaseController.connection.Table<Race>().Where(x => x.id == idR).First().Name;
             default:
                 return "Unknown";
         }

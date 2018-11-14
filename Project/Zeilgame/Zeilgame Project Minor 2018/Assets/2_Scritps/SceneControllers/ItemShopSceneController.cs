@@ -44,7 +44,7 @@ public class ItemShopSceneController : MonoBehaviour {
         {
             i.InInventory++;
             i.Save();
-            MainGameController.instance.player.Gold -= i.Price;
+            MainGameController.instance.player.GiveGold(-i.Price);
             MainGameController.instance.player.Save();
             _goldText.text = MainGameController.instance.player.Gold + "G";
             _itemBuyPanels.Where(x => x.item.id == i.id).First().SetData(i);

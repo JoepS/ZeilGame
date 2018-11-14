@@ -279,5 +279,11 @@
 	}, {
 		"key": "request_race_boat_description",
 		"value": "Race de aangegeven race met deze boot"
+	},{
+		"key": "completed_request_text",
+		"value": "Je hebt een quest voltooid! Je heb {0} gekregen!"
+	},{
+		"key": "a_text",
+		"value": "een"
 	}]
 }

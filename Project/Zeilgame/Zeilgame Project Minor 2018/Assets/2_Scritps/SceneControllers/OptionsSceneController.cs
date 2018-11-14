@@ -143,6 +143,11 @@ public class OptionsSceneController : MonoBehaviour {
         {
             ap.Reset();
         }
+        //Reset Request
+        foreach(Request r in MainGameController.instance.databaseController.connection.Table<Request>().ToList())
+        {
+            r.Reset();
+        }
         MainGameController.instance.player.Delete();
         MainGameController.instance.player = null;
         MainGameController.instance.sceneController.ResetStack();

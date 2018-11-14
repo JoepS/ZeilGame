@@ -78,6 +78,16 @@ public class Boat : Model {
 
     public List<Sail> GetSails()
     {
+        List<Sail> sails = new List<Sail>();
+        foreach(int i in GetSailsId())
+        {
+            sails.Add(MainGameController.instance.databaseController.connection.Table<Sail>().Where(x => x.id == i).First());
+        }
+        return sails;
+    }
+
+    public List<Sail> GetSailsBought()
+    {
         _sails = new List<Sail>();
         foreach(int i in GetSailsId())
         {
@@ -96,7 +106,7 @@ public class Boat : Model {
             damageModifier *= u.DamageModifier;
         }
 
-        foreach(Sail s in GetSails())
+        foreach(Sail s in GetSailsBought())
         {
             damageModifier *= s.DamageModifier;
         }
@@ -125,7 +135,7 @@ public class Boat : Model {
         {
             hullLengthModifier *= u.SpeedModifier;
         }
-        Sail s = GetSails().Where(x => x.Active).First();
+        Sail s = GetSailsBought().Where(x => x.Active).First();
         hullLengthModifier *= s.SpeedModifier;
         return HullLength * hullLengthModifier;
     }
@@ -137,7 +147,7 @@ public class Boat : Model {
         {
             offlineSpeedModifier *= u.OfflineSpeedModifier;
         }
-        foreach(Sail s in GetSails())
+        foreach(Sail s in GetSailsBought())
         {
             offlineSpeedModifier *= s.OfflineSpeedModifier;
         }
@@ -170,9 +180,9 @@ public class Boat : Model {
 
     public float GetMaxWindSpeedSails()
     {
-        if (GetSails().Where(x => x.Active).Count() > 0)
+        if (GetSailsBought().Where(x => x.Active).Count() > 0)
         {
-            Sail s = GetSails().Where(x => x.Active).First();
+            Sail s = GetSailsBought().Where(x => x.Active).First();
             return s.MaxWindSpeed;
         }
         else

@@ -15,7 +15,7 @@ public class RequestSceneController : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        _requests = MainGameController.instance.databaseController.connection.Table<Request>().Where(x => x.LocationId == MainGameController.instance.player.CurrentLocation).ToList();
+        _requests = MainGameController.instance.databaseController.connection.Table<Request>().Where(x => x.LocationId == MainGameController.instance.player.CurrentLocation || x.Accepted).ToList();
         CreateRequestPanels();
 	}
 	
@@ -41,7 +41,7 @@ public class RequestSceneController : MonoBehaviour {
     public void OnDropDownValueChanged()
     {
         string value = _dropDown.options[_dropDown.value].text;
-        _requests = MainGameController.instance.databaseController.connection.Table<Request>().Where(x => x.LocationId == MainGameController.instance.player.CurrentLocation).ToList();
+        _requests = MainGameController.instance.databaseController.connection.Table<Request>().Where(x => x.LocationId == MainGameController.instance.player.CurrentLocation || x.Accepted).ToList();
         switch (value)
         {
             case "Avaliable":

@@ -294,5 +294,11 @@
 	}, {
 		"key": "request_race_boat_description",
 		"value": "Race the indicated race with this boat"
+	},{
+		"key": "completed_request_text",
+		"value": "You have completed a request! You received {0}"
+	},{
+		"key": "a_text",
+		"value": "a"
 	}]
 }

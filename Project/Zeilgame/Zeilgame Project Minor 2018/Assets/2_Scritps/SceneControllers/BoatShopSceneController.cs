@@ -43,7 +43,7 @@ public class BoatShopSceneController : MonoBehaviour {
             b.Active = true;
             b.Save();
             UpdateBoatBuyPanels();
-            MainGameController.instance.player.Gold -= b.Price;
+            MainGameController.instance.player.GiveGold( -b.Price);
             MainGameController.instance.player.Save();
             _goldText.text = "Gold: " + MainGameController.instance.player.Gold;
         }
@@ -60,6 +60,13 @@ public class BoatShopSceneController : MonoBehaviour {
             Boat curActive = activeBoats.First();
             curActive.Active = false;
             curActive.Save();
+            Sail activeSail = curActive.GetSailsBought().Where(x => x.Active).First();
+            if (!b.GetSailsBought().Contains(activeSail))
+            {
+                Sail s = b.GetSailsBought().Where(x => x.Bought).First();
+                s.Active = true;
+                s.Save();
+            }
         }
         b.Active = true;
         b.Save();

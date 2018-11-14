@@ -62,6 +62,7 @@ public class Request : Model {
 
     public override void Reset()
     {
+        this.Accepted = false;
         this.Completed = false;
         this.Save();
     }

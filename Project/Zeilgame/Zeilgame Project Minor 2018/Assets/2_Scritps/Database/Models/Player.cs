@@ -40,6 +40,12 @@ public class Player : Model {
         _lastInGame = default(DateTime);
     }
 
+    public void GiveGold(int amount)
+    {
+        Gold += amount;
+        this.Save();
+    }
+
     public DateTime GetLastInGame()
     {
             _lastInGame = (DateTime)JsonUtility.FromJson<JsonDateTime>(LastInGame);

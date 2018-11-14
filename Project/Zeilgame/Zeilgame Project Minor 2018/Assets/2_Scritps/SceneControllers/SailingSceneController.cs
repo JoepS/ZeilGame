@@ -58,6 +58,8 @@ public class SailingSceneController : MonoBehaviour
     {
         if (MainGameController.instance == null)
             return;
+        Debug.Log("SailingSceneController.Awake()");
+        MainGameController.instance.canGoBack = false;
         /*
         if (MainGameController.instance.sceneController.StackCount() > 0)
         {
@@ -240,7 +242,7 @@ public class SailingSceneController : MonoBehaviour
             _arrivalTime = DateTime.Now + _route.GetTimeLeft(_currentSpeed);
 
             float seaMovementSpeed = _currentSpeed / 2;// (int)MainGameController.Map(_currentSpeed, MainGameController.instance.player.GetActiveBoat().GetSpeed(), MainGameController.instance.player.GetActiveBoat().GetSpeedModified(), 1, 10);
-            _seaMovement.SetSpeed(seaMovementSpeed);
+            //_seaMovement.SetSpeed(seaMovementSpeed);
 
             yield return new WaitForSeconds(1);
         }
@@ -269,7 +271,6 @@ public class SailingSceneController : MonoBehaviour
     {
         MainGameController.instance.player.SetLastInGame(JsonUtility.ToJson((JsonDateTime)DateTime.Now));
         MainGameController.instance.player.Save();
-        MainGameController.instance.canGoBack = true;
         MainGameController.instance.sceneController.LoadScene(MapSceneName, true, LoadSceneMode.Additive);
     }
 
@@ -309,7 +310,7 @@ public class SailingSceneController : MonoBehaviour
     public void SetChangeSailsPanel()
     {
         _sailChangePanels = new List<GameObject>();
-        List<Sail> sails = MainGameController.instance.player.GetActiveBoat().GetSails();
+        List<Sail> sails = MainGameController.instance.player.GetActiveBoat().GetSailsBought();
         foreach(Sail s in sails)
         {
             GameObject go = GameObject.Instantiate(_sailChangePanelPrefab);
@@ -354,13 +355,13 @@ public class SailingSceneController : MonoBehaviour
 
     public void ChangeSail(Sail sail)
     {
-        Sail s = MainGameController.instance.player.GetActiveBoat().GetSails().Where(x => x.Active).First();
+        Sail s = MainGameController.instance.player.GetActiveBoat().GetSailsBought().Where(x => x.Active).First();
         s.Active = false;
         s.Save();
         sail.Active = true;
         sail.Save();
 
-        List<Sail> sails = MainGameController.instance.player.GetActiveBoat().GetSails().ToList();
+        List<Sail> sails = MainGameController.instance.player.GetActiveBoat().GetSailsBought().ToList();
         for(int i = 0; i< sails.Count; i++)
         {
             _sailChangePanels[i].GetComponent<SailChangePanel>().SetData(sails[i]);

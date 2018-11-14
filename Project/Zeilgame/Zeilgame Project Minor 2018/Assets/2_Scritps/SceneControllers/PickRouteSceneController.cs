@@ -31,6 +31,7 @@ public class PickRouteSceneController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        _worldMap.GetComponent<WorldMapController>().CreateLocationPointers(true);
         addLocationListeners();
     }
 

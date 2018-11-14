@@ -16,7 +16,7 @@ public class SailShopSceneController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
-        List<Sail> sails = MainGameController.instance.databaseController.connection.Table<Sail>().ToList();
+        List<Sail> sails = MainGameController.instance.player.GetActiveBoat().GetSails();
         foreach (Sail b in sails)
         {
             _sailBuyPanels.Add(CreateSailBuyPanel(b));
@@ -38,7 +38,7 @@ public class SailShopSceneController : MonoBehaviour {
             s.Active = true;
             s.Save();
             UpdateSailBuyPanels();
-            MainGameController.instance.player.Gold -= s.Price;
+            MainGameController.instance.player.GiveGold(-s.Price);
             MainGameController.instance.player.Save();
             _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
         }

@@ -58,6 +58,18 @@ public class WorldMapController : MonoBehaviour {
         if (MainGameController.instance != null)
         {
             List<Location> locations = MainGameController.instance.databaseController.connection.Table<Location>().ToList();
+            Debug.Log(locations.Count + " / " + viewOnlyAvaliableLocations);
+            if (viewOnlyAvaliableLocations)
+            {
+                int currentLocationId = MainGameController.instance.player.CurrentLocation;
+                List<Route> routes = MainGameController.instance.databaseController.connection.Table<Route>().Where(x => x.from == currentLocationId ||
+                                                                                                                        x.to == currentLocationId).ToList();
+                Debug.Log(routes.Count + "/ " + locations.Count);
+                locations = locations.Where(x => routes.Where(y => y.GetToLocation().id == x.id).Count() > 0 || routes.Where(y => y.GetFromLocation().id == x.id).Count() > 0).ToList();
+                Debug.Log(locations.Count);
+                //locations = locations.Where(x => routes.Where(y => y.GetFromLocation().id == x.id).Count() > 0).ToList();
+                //Debug.Log(locations.Count);
+            }
             foreach (Location l in locations)
             {
                 if (MainGameController.instance.player != null)

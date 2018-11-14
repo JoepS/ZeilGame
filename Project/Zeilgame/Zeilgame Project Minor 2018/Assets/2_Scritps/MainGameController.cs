@@ -75,20 +75,32 @@ public class MainGameController : MonoBehaviour {
             Destroy(this.gameObject);
         }
 	}
+    bool _cancelAxisInUse = false;
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetAxis("Cancel") > 0)
+        if (Input.GetAxisRaw("Cancel") == 1)
         {
-            if (!canGoBack && !SceneManager.GetActiveScene().name.Equals(StartMenuSceneName))
-                _sceneController.LoadScene(StartMenuSceneName, false);
-            else if (!_sceneController.OneSceneBack())
-                CloseGame();
+            if (!_cancelAxisInUse)
+            {
+                _cancelAxisInUse = true;
+                if ((!canGoBack && _sceneController.CanGoOneSceneBack()) && !SceneManager.GetActiveScene().name.Equals(StartMenuSceneName))
+                    _sceneController.LoadScene(StartMenuSceneName, false);
+                else if (!_sceneController.OneSceneBack())
+                    CloseGame();
+
+            }
         }
+        if(Input.GetAxisRaw("Cancel") != 1)
+        {
+            _cancelAxisInUse = false;
+        }
+
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _player.AddExperience(ExperienceController.GetExperienceForLevel(_player.Level));
+            if(_player != null)
+                _player.AddExperience(ExperienceController.GetExperienceForLevel(_player.Level));
         }
 	}
 

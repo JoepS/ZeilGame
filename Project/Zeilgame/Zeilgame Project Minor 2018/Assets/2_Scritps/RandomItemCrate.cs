@@ -58,7 +58,7 @@ public class RandomItemCrate : MonoBehaviour, IPointerDownHandler{
         MainGameController.instance.achievementManager.AddAchievementProperty(AchievementProperties.CratesOpened, 1);
         if (_randomItem == null)
         {
-            MainGameController.instance.player.Gold += _randomGoldAmount;
+            MainGameController.instance.player.GiveGold(_randomGoldAmount);
             go.GetComponent<ItemPopup>().SetText(_randomGoldAmount + "\n" + MainGameController.instance.localizationManager.GetLocalizedValue("gold_text"));
         }
         else
