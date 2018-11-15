@@ -133,7 +133,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8b43d041ecbf24b98b893747c0539d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ngzLimit: 40
   _rotationSpeed: 0
   _target: {fileID: 0}
   _tackingAccuracy: 5

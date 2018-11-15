@@ -14,12 +14,9 @@ public class Cloud : MonoBehaviour {
 
     Blink _thunderBlink;
 
-    float _originalYPos;
-
     void Start()
     {
         _width = this.GetComponent<RectTransform>().rect.width;
-        _originalYPos = _thunderImage.transform.localPosition.y;
     }
 
     void Update()

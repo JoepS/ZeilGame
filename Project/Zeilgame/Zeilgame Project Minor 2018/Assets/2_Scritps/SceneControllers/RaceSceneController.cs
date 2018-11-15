@@ -61,21 +61,23 @@ public class RaceSceneController : MonoBehaviour {
 
     [SerializeField] List<IBoat> _finishOrder = new List<IBoat>();
 
-    bool pointsAwarded = false;
+    bool _pointsAwarded = false;
 
     List<Vector3> _opponentCurrentBuoys = new List<Vector3>();
 
     //StartCoroutine(GetWeather());
 
-    WeatherData weatherData;
+    WeatherData _weatherData;
+
+    [SerializeField] GameObject _windIndicator;
 
     void GetWeather()
     {
-        weatherData = PickRaceSceneController.CurrentWeatherData;
-        if (weatherData != null)
+        _weatherData = PickRaceSceneController.CurrentWeatherData;
+        if (_weatherData != null)
         {
             //_windAngle = weatherData.getWindDir();
-            _windSpeed = (float)weatherData.getWindSpeed();
+            _windSpeed = (float)_weatherData.getWindSpeed();
         }
     }
 
@@ -173,7 +175,7 @@ void Start () {
 	void Update () {
         //_windAngle = _waypointsPanel.transform.localEulerAngles.z;
         _targetPointer.transform.right = _playerTargetBuoy.transform.position - _targetPointer.transform.position;
-
+        _windIndicator.transform.localRotation = Quaternion.Euler(0, 0, _windAngle);
         Vector2 pos = _waypointsPanel.transform.localPosition;
         pos -= _playerBoat.velocity;
         _waypointsPanel.transform.localPosition = pos;
@@ -182,7 +184,7 @@ void Start () {
             UpdatePlayerBuoys();
         else
         {
-            if(_finishOrder.Count == _opponenents.Count + 1 && !pointsAwarded)
+            if(_finishOrder.Count == _opponenents.Count + 1 && !_pointsAwarded)
             {
                 AwardPoints();
             }
@@ -294,6 +296,7 @@ void Start () {
         }
         _countDownPanel.SetActive(false);
         _playerBoat.canMove = true;
+        Wave.CanMove = true;
         foreach(OpponentRaceAi ora in _opponenents)
         {
             ora.canMove = true;
@@ -425,13 +428,13 @@ void Start () {
 
         }
 
-        pointsAwarded = true;
+        _pointsAwarded = true;
     }
 
 
     public void ContinueButtonClick()
     {
-        if (!pointsAwarded)
+        if (!_pointsAwarded)
             AwardPoints();
         MainGameController.instance.canGoBack = true;
         MainGameController.instance.sceneController.LoadScene("VillageScene", false);

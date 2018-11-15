@@ -241,7 +241,7 @@ public class SailingSceneController : MonoBehaviour
             }
             _arrivalTime = DateTime.Now + _route.GetTimeLeft(_currentSpeed);
 
-            float seaMovementSpeed = _currentSpeed / 2;// (int)MainGameController.Map(_currentSpeed, MainGameController.instance.player.GetActiveBoat().GetSpeed(), MainGameController.instance.player.GetActiveBoat().GetSpeedModified(), 1, 10);
+            //float seaMovementSpeed = _currentSpeed / 2;// (int)MainGameController.Map(_currentSpeed, MainGameController.instance.player.GetActiveBoat().GetSpeed(), MainGameController.instance.player.GetActiveBoat().GetSpeedModified(), 1, 10);
             //_seaMovement.SetSpeed(seaMovementSpeed);
 
             yield return new WaitForSeconds(1);

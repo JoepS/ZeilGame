@@ -85,7 +85,10 @@ public class MainGameController : MonoBehaviour {
             {
                 _cancelAxisInUse = true;
                 if ((!canGoBack && _sceneController.CanGoOneSceneBack()) && !SceneManager.GetActiveScene().name.Equals(StartMenuSceneName))
+                {
+                    _sceneController.ResetStack();
                     _sceneController.LoadScene(StartMenuSceneName, false);
+                }
                 else if (!_sceneController.OneSceneBack())
                     CloseGame();
 

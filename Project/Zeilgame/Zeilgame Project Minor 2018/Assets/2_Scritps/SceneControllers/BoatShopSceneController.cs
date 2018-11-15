@@ -63,6 +63,8 @@ public class BoatShopSceneController : MonoBehaviour {
             Sail activeSail = curActive.GetSailsBought().Where(x => x.Active).First();
             if (!b.GetSailsBought().Contains(activeSail))
             {
+                activeSail.Active = false;
+                activeSail.Save();
                 Sail s = b.GetSailsBought().Where(x => x.Bought).First();
                 s.Active = true;
                 s.Save();

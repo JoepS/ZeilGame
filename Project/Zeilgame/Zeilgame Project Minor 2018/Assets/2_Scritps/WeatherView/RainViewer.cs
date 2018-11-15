@@ -39,7 +39,6 @@ public class RainViewer : MonoBehaviour {
     void SimulateRainTick()
     {
         float width = this.GetComponent<RectTransform>().rect.width;
-        float distance = width / (float)(_amountOfDrops);
         for (int i = 0; i < _amountOfDrops; i++)
         {
             GameObject drop = GetRainDrop();
