@@ -20,7 +20,7 @@ public class WeatherViewer : MonoBehaviour {
         new WeatherSetting("rain", 7.5f, 100, false),
         new WeatherSetting("thunderstorm", 7.5f, 250, false),
         new WeatherSetting("snow", 3.75f, 1, true),
-        new WeatherSetting("mist", 0, 0, false),
+        new WeatherSetting("mist", -1, 0, false),
         new WeatherSetting("drizzle", 7.5f, 10, false),
         new WeatherSetting("drizzle rain", 7.5f, 10, false),
         new WeatherSetting("light rain", 7.5f, 75, false),
@@ -71,7 +71,7 @@ public class WeatherViewer : MonoBehaviour {
 
         DayNightAffected.FolowTime = !_currentWeatherSetting.Name.Equals("thunderstorm");
 
-        _mistImage.SetActive(_currentWeatherSetting.Name.Equals("mist"));
+        _mistImage.SetActive(_currentWeatherSetting.CloudFrequency < 0);
         _cloudMovement.SpawningClouds((_currentWeatherSetting.CloudFrequency > 0) ? true : false, _currentWeatherSetting.CloudFrequency, _currentWeatherSetting.AmountOfDrops, _currentWeatherSetting.Snow);
         if (_currentWeatherSetting.Name.Contains("thunder"))
         {

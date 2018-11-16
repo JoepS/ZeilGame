@@ -285,5 +285,11 @@
 	},{
 		"key": "a_text",
 		"value": "een"
+	},{
+		"key": "buy_sail_text",
+		"value": "Koop zeil"
+	}, {
+		"key": "dont_have_sail_text",
+		"value": "Je hebt nog geen zeil!"
 	}]
 }

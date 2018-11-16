@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +22,14 @@ public class WeatherSceneController : MonoBehaviour {
 
     int _loadedIndex;
 
+    static List<OWMWeatherImage> _downloadedWeatherImages;
+
 	// Use this for initialization
 	void Start () {
+        if(_downloadedWeatherImages == null)
+        {
+            _downloadedWeatherImages = new List<OWMWeatherImage>();
+        }
         StartCoroutine(getWindImages());
     }
 
@@ -46,32 +53,42 @@ public class WeatherSceneController : MonoBehaviour {
         Vector2 playerpos = MainGameController.instance.player.getCurrentLocationLatLon();
         Vector3 pos = WorldMapController.LatitudeLongitudeToTileId(playerpos.x, playerpos.y, amount);
 
-        int minx = (int)((pos.x - 1 >= 0) ? pos.x - 1 : 0);
-        int maxx = (int)((pos.x + 1 < maxxy) ? pos.x + 1 : maxxy-1);
-        int miny = (int)((pos.y - 1 >= 0) ? pos.y - 1 : 0);
-        int maxy = (int)((pos.y + 1 < maxxy) ? pos.y + 1 : maxxy - 1);
+        int minx = (int)((pos.x - 2 >= 0) ? pos.x - 2 : 0);
+        int maxx = (int)((pos.x + 2 < maxxy) ? pos.x + 2 : maxxy-1);
+        int miny = (int)((pos.y - 2 >= 0) ? pos.y - 2 : 0);
+        int maxy = (int)((pos.y + 2 < maxxy) ? pos.y + 2 : maxxy - 1);
 
         int lastIndex = 0;
 
-        _windImagesParent.SetActive(false);
+        //_windImagesParent.SetActive(false);
         _loadingImage.SetActive(true);
         _zoominButton.interactable = false;
         _zoomOutButton.interactable = false;
 
-        _loadedIndex = MainGameController.instance.networkController.GetCurrentWeatherImageIndex();
-
+        //_loadedIndex = MainGameController.instance.networkController.GetCurrentWeatherImageIndex();
+        int startIndex = _loadedIndex;
+        int index = startIndex;
         for (int fx = minx; fx <= maxx; fx++)
         {
             for (int fy = maxy; fy >= miny; fy--)
             {
-                int index = MainGameController.instance.networkController.getWindImage(amount, fx, fy);
+                OWMWeatherImage oWMWeatherImage = _downloadedWeatherImages.Where(x => x.ZoomLevel == _currZoom && x.Position == new Vector2(fx, fy) && (x.DownloadTime - System.DateTime.Now).Hours < 1).FirstOrDefault();
+                
+                if (oWMWeatherImage == null)
+                {
+                    index = MainGameController.instance.networkController.getWindImage(amount, fx, fy);
+                }
+                else
+                {
+                    index++; 
+                    oWMWeatherImage.Index = index;
+                }
                 lastIndex = index;
                 StartCoroutine(WaitForImageResponse(index, new Vector2(fx, fy)));
                 yield return new WaitForSeconds(0.1f);
             }
         }
-
-        StartCoroutine(viewWeatherMapWhenDone(lastIndex));
+        StartCoroutine(viewWeatherMapWhenDone(startIndex, lastIndex));
         //float parentpos = ((worldMapSize / 2048) - 1) * 1024;
         //_windImagesParent.transform.localPosition = new Vector3(parentpos, -parentpos);
 
@@ -80,11 +97,24 @@ public class WeatherSceneController : MonoBehaviour {
 
     }
 
-    public IEnumerator viewWeatherMapWhenDone(int lastIndex)
+    public IEnumerator viewWeatherMapWhenDone(int startIndex, int lastIndex)
     {
-        while(lastIndex != _loadedIndex)
+        while (lastIndex != _loadedIndex)
         {
             yield return new WaitForSeconds(1);
+        }
+        for (int i = 0; i < _windImagesParent.transform.childCount; i++)
+        {
+            int trying = 0;
+            int.TryParse((_windImagesParent.transform.GetChild(i).name.Split('-')[0]), out trying);
+            if (trying <= startIndex)
+            {
+                Destroy(_windImagesParent.transform.GetChild(i).gameObject);
+            }
+            else
+            {
+                _windImagesParent.transform.GetChild(i).gameObject.SetActive(true);
+            }
         }
         _windImagesParent.SetActive(true);
         _loadingImage.SetActive(false);
@@ -118,12 +148,32 @@ public class WeatherSceneController : MonoBehaviour {
         _scrollviewContent.GetComponent<RectTransform>().sizeDelta = size;
         _worldMap.GetComponent<RectTransform>().sizeDelta = size;
         _windImagesParent.GetComponent<RectTransform>().sizeDelta = size;
-
         for (int i = 0; i < _windImagesParent.transform.childCount; i++)
         {
-            Destroy(_windImagesParent.transform.GetChild(i).gameObject);
-        }
+            //Destroy(_windImagesParent.transform.GetChild(i).gameObject);
+            GameObject child = _windImagesParent.transform.GetChild(i).gameObject;
+            child.transform.localScale = increase ? new Vector3(2, 2, 2) : new Vector3(0.5f, 0.5f, 0.5f); 
+            Vector2 pos = child.transform.localPosition;
+            pos.x /= 2048;
+            pos.y /= -2048;
 
+            float zoom = _currZoom;
+            if (zoom > 2 && increase)
+                zoom = 2;
+            else if (!increase)
+            {
+                zoom = 0.5f;
+            }
+            child.transform.localPosition = new Vector2(2048 * zoom * pos.x, -(2048 * zoom) * pos.y);
+            if (increase)
+            {
+                child.transform.localPosition += new Vector3(1024, -1024, 0);
+            }
+            else
+            {
+                child.transform.localPosition -= new Vector3(512, -512, 0);
+            }
+        }
         StartCoroutine(getWindImages());
         _worldMap.GetComponent<WorldMapController>().ScrollToPosition(MainGameController.instance.player.getCurrentLocationLatLon());
         _worldMap.GetComponent<WorldMapController>().CreateLocationPointers(false);
@@ -131,21 +181,32 @@ public class WeatherSceneController : MonoBehaviour {
 
     IEnumerator WaitForImageResponse(int index, Vector2 pos)
     {
-        Sprite weatherImage = (Sprite)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
+        OWMWeatherImage weatherImage = _downloadedWeatherImages.Where(x => x.ZoomLevel == _currZoom && x.Position == pos && (x.DownloadTime - System.DateTime.Now).Hours < 1).FirstOrDefault();
+            //(OWMWeatherImage)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
         while(weatherImage == null)
         {
             yield return new WaitForSeconds(1);
-            weatherImage = (Sprite)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
+            weatherImage = (OWMWeatherImage)MainGameController.instance.networkController.getResponse(Responses.WeatherImg, index);
+            if(weatherImage != null)
+            {
+                weatherImage.Position = pos;
+                weatherImage.ZoomLevel = _currZoom;
+                _downloadedWeatherImages.Add(weatherImage);
+            }
         }
+        index = weatherImage.Index;
+
         GameObject windImage = GameObject.Instantiate(_windImagePrefab);
         windImage.transform.SetParent(_windImagesParent.transform);
-        windImage.name = "WindImage" + pos;
-        windImage.GetComponent<Image>().sprite = weatherImage;
+        windImage.name = index + "-WindImage" + pos;
+        windImage.GetComponent<Image>().sprite = weatherImage.Image;
         windImage.GetComponent<Image>().color = Color.white;
         windImage.GetComponent<Image>().mainTexture.filterMode = FilterMode.Point;
         windImage.GetComponent<RectTransform>().sizeDelta = new Vector2(2048, 2048);
         windImage.transform.localScale = Vector3.one;
         windImage.transform.localPosition = new Vector2(pos.x * 2048, pos.y * -2048);
+        windImage.SetActive(false);
+        
         _loadedIndex += 1;
     }
 

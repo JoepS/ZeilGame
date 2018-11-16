@@ -76,7 +76,11 @@ public class NetworkController : MonoBehaviour
                 www.LoadImageIntoTexture(texture);
                 Rect rect = new Rect(0, 0, texture.width, texture.height);
                 Sprite spriteToUse = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100);
-                _responses.Add(Responses.WeatherImg.ToString() + index, spriteToUse);
+
+                OWMWeatherImage oWMWeatherImage = new OWMWeatherImage(spriteToUse, Vector2.negativeInfinity, -1, System.DateTime.Parse(www.responseHeaders["Date"]), index);
+
+                _responses.Add(Responses.WeatherImg.ToString() + index, oWMWeatherImage);
+
             }
             processResponse(www.text);
         }
@@ -130,8 +134,8 @@ public class NetworkController : MonoBehaviour
         if (!_responses.ContainsKey(key))
         {
 #if UNITY_EDITOR
-            Debug.Log("I dont have this key: " + key);
-            Debug.Log("WeatherIndex: " + (weatherIndex - 1) + "/ WeatherRectIndex: " + (weatherRectIndex - 1) + "/ WeatherImageIndex: " + (weatherImageIndex - 1));
+            Debug.LogWarning("I dont have this key: " + key);
+            Debug.LogWarning("WeatherIndex: " + (weatherIndex - 1) + "/ WeatherRectIndex: " + (weatherRectIndex - 1) + "/ WeatherImageIndex: " + (weatherImageIndex - 1));
 #endif
             return null;
         }

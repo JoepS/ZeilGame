@@ -300,5 +300,11 @@
 	},{
 		"key": "a_text",
 		"value": "a"
+	},{
+		"key": "buy_sail_text",
+		"value": "Buy sail"
+	}, {
+		"key": "dont_have_sail_text",
+		"value": "You dont have a sail yet!"
 	}]
 }

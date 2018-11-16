@@ -58,7 +58,6 @@ public class WorldMapController : MonoBehaviour {
         if (MainGameController.instance != null)
         {
             List<Location> locations = MainGameController.instance.databaseController.connection.Table<Location>().ToList();
-            Debug.Log(locations.Count + " / " + viewOnlyAvaliableLocations);
             if (viewOnlyAvaliableLocations)
             {
                 int currentLocationId = MainGameController.instance.player.CurrentLocation;
@@ -126,6 +125,10 @@ public class WorldMapController : MonoBehaviour {
         //float xval = MainGameController.Map(position.y, -180, 180, 0, 1);
         _mapScrollView.horizontalNormalizedPosition = xval;
         _mapScrollView.verticalNormalizedPosition = yval;
+        if(MainGameController.instance.player == null)
+        {
+            _PlayerPointer.transform.localPosition = WorldToMap(position);
+        }
     }
 
     Vector2 MapToWorld(Vector2 mapCoordinates)

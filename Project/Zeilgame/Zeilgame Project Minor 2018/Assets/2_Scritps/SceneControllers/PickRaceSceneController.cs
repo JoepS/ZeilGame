@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PickRaceSceneController : MonoBehaviour {
 
     const string BoatShopSceneName = "BoatShopScene";
+    const string SailShopSceneName = "SailShopScene";
 
     [SerializeField] GameObject _racePanel;
     [SerializeField] GameObject _scrollviewContent;
@@ -17,6 +18,7 @@ public class PickRaceSceneController : MonoBehaviour {
     [SerializeField] Text _windSpeedText;
 
     [SerializeField] GameObject _noBoatPanel;
+    [SerializeField] GameObject _noSailPanel;
 
     void GetWeather()
     {
@@ -44,6 +46,10 @@ public class PickRaceSceneController : MonoBehaviour {
         if (MainGameController.instance.player.GetActiveBoat() == null)
         {
             _noBoatPanel.SetActive(true);
+        }
+        else if(MainGameController.instance.player.GetActiveBoat().GetSailsBought().Count == 0)
+        {
+            _noSailPanel.SetActive(true);
         }
         else
         {
@@ -79,5 +85,10 @@ public class PickRaceSceneController : MonoBehaviour {
     public void OnBuyBoatButtonClick()
     {
         MainGameController.instance.sceneController.LoadScene(BoatShopSceneName);
+    }
+
+    public void OnBuySailButtonClick()
+    {
+        MainGameController.instance.sceneController.LoadScene(SailShopSceneName);
     }
 }

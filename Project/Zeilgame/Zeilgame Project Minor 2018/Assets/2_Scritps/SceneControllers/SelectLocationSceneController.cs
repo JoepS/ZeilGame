@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SelectLocationSceneController : MonoBehaviour {
@@ -25,6 +26,8 @@ public class SelectLocationSceneController : MonoBehaviour {
         {
             options.Add(new Dropdown.OptionData(l.Name));
         }
+        options.Add(new Dropdown.OptionData(""));
+        options.Add(new Dropdown.OptionData(""));
         _locationDropdown.AddOptions(options);
         OnDropDownChanged();
 	}
@@ -68,7 +71,18 @@ public class SelectLocationSceneController : MonoBehaviour {
 
     public void OnDropDownChanged()
     {
+        if(_locationDropdown.value >= _locations.Count)
+        {
+            _locationDropdown.value = _locations.Count - 1;
+        }
+        ScrollRect contentPanel = _locationDropdown.GetComponentInChildren<ScrollRect>();
+
+        float val = 1 - (1 / ((float)(_locationDropdown.options.Count - 3) / (float)(_locationDropdown.value)));
+
+        if (contentPanel != null)
+            contentPanel.normalizedPosition = new Vector2(0,val);
         Location l = _locations[_locationDropdown.value];
+
         _worldMapController.ScrollToPosition(new Vector2(l.lat, l.lon));
     }
 }

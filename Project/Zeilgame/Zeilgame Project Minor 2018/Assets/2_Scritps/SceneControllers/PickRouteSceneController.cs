@@ -9,6 +9,7 @@ public class PickRouteSceneController : MonoBehaviour {
 
     const string SailingSceneName = "SailingScene";
     const string BoatShopSceneName = "BoatShopScene";
+    const string SailShopSceneName = "SailShopScene";
 
     [SerializeField] GameObject _worldMap;
     [SerializeField] GameObject _scrollviewContent;
@@ -27,6 +28,7 @@ public class PickRouteSceneController : MonoBehaviour {
     [SerializeField] Text _routeText;
 
     [SerializeField] GameObject _noBoatPanel;
+    [SerializeField] GameObject _noSailPanel;
     [SerializeField] Button _chooseRouteButton;
 
 	// Use this for initialization
@@ -91,13 +93,18 @@ public class PickRouteSceneController : MonoBehaviour {
         if (routes.Count() == 1)
         {
             Route route = routes.First();
-            _routeText.text = curLocation.Name + " "+ MainGameController.instance.localizationManager.GetLocalizedValue("to_text") +" " + mlp.GetLocation().Name;
+            _routeText.text = curLocation.Name + " " + MainGameController.instance.localizationManager.GetLocalizedValue("to_text") + " " + mlp.GetLocation().Name;
             _worldMap.GetComponent<WorldMapController>().ShowRoute(route);
             _selectedRoute = route;
 
             if (MainGameController.instance.player.GetActiveBoat() == null)
             {
                 _noBoatPanel.SetActive(true);
+                _chooseRouteButton.interactable = false;
+            }
+            else if (MainGameController.instance.player.GetActiveBoat().GetSailsBought().Count == 0)
+            {
+                _noSailPanel.SetActive(true);
                 _chooseRouteButton.interactable = false;
             }
         }
@@ -137,10 +144,16 @@ public class PickRouteSceneController : MonoBehaviour {
     public void OnOkButtonClick()
     {
         _noBoatPanel.SetActive(false);
+        _noSailPanel.SetActive(false);
     }
 
     public void OnBuyBoatButtonClick()
     {
         MainGameController.instance.sceneController.LoadScene(BoatShopSceneName);
+    }
+
+    public void OnBuySailButtonClick()
+    {
+        MainGameController.instance.sceneController.LoadScene(SailShopSceneName);
     }
 }
