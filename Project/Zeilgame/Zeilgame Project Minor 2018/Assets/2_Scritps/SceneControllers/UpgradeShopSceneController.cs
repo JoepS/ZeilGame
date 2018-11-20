@@ -27,7 +27,11 @@ public class UpgradeShopSceneController : MonoBehaviour
 
     public List<Upgrade> GetUpgradesListCurBoat()
     {
-        List<int> ids = MainGameController.instance.player.GetActiveBoat().GetUpgradesId();
+        List<int> ids = new List<int>();
+        if (MainGameController.instance.player.GetActiveBoat() != null)
+        {
+            ids = MainGameController.instance.player.GetActiveBoat().GetUpgradesId();
+        }
         return MainGameController.instance.databaseController.connection.Table<Upgrade>().Where(x => ids.Contains(x.id)).ToList();
     }
 

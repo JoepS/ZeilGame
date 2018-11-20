@@ -9,9 +9,6 @@ public class MapLocationPointer : MonoBehaviour {
 
     Button _button;
 
-    [SerializeField] GameObject _popupPanel;
-    [SerializeField] Text _popupText;
-
 	// Use this for initialization
 	void Start () {
         _button = this.GetComponent<Button>();
@@ -21,16 +18,6 @@ public class MapLocationPointer : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    public void SetPopupText(string text)
-    {
-        _popupText.text = text;
-    }
-
-    public void ViewPopupPanel(bool enabled)
-    {
-        _popupPanel.SetActive(enabled);
-    }
 
     public Button GetButton()
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Linq;
 
 public class WorldMapController : MonoBehaviour {
@@ -10,7 +11,7 @@ public class WorldMapController : MonoBehaviour {
     [SerializeField] GameObject _routePointerParent;
     [SerializeField] GameObject _locationPointer;
     [SerializeField] GameObject _loctionPointersParent;
-    [SerializeField] ScrollRect _mapScrollView;
+    //[SerializeField] ScrollRect _mapScrollView;
     [SerializeField] GameObject _PlayerPointer;
 
     List<MapLocationPointer> _locationPointers;
@@ -24,6 +25,7 @@ public class WorldMapController : MonoBehaviour {
 
     private void Awake()
     {
+
         if (MainGameController.instance != null)
         {
             _locationPointers = new List<MapLocationPointer>();
@@ -34,17 +36,17 @@ public class WorldMapController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        ScrollToPosition(new Vector2(0, 0));
         if (MainGameController.instance.player != null)
         {
             Vector2 playerpos = new Vector2(MainGameController.instance.player.CurrentLocationLat
                                             , MainGameController.instance.player.CurrentLocationLon);
-            ScrollToPosition(playerpos);
+            //ScrollToPosition(playerpos);
         }
 	}
 
 	// Update is called once per frame
 	void Update () {
-
 	}
 
     public void CreateLocationPointers(bool viewOnlyAvaliableLocations)
@@ -116,15 +118,13 @@ public class WorldMapController : MonoBehaviour {
 
     public void ScrollToPosition(Vector2 position)
     {
-
         Vector2 mapPos = WorldToMap(position);
-        float xval = MainGameController.Map(mapPos.x, -_MapSize/2, _MapSize/2, 0, 1);
-        float yval = MainGameController.Map(mapPos.y, -_MapSize/2, _MapSize/2, 0, 1);
 
-        //float yval = MainGameController.Map(position.x, -90, 90, 0, 1);
-        //float xval = MainGameController.Map(position.y, -180, 180, 0, 1);
-        _mapScrollView.horizontalNormalizedPosition = xval;
-        _mapScrollView.verticalNormalizedPosition = yval;
+        float posx = mapPos.x * -1;
+        float posy = mapPos.y * -1;
+
+        this.GetComponent<RectTransform>().anchoredPosition = new Vector3(posx, posy, 0);
+
         if(MainGameController.instance.player == null)
         {
             _PlayerPointer.transform.localPosition = WorldToMap(position);
@@ -216,6 +216,55 @@ public class WorldMapController : MonoBehaviour {
         var y = (int)Mathf.Floor((1.0f - Mathf.Log(Mathf.Tan(latitude * Mathf.PI / 180.0f)
                 + 1.0f / Mathf.Cos(latitude * Mathf.PI / 180f)) / Mathf.PI) / 2.0f * Mathf.Pow(2.0f, zoom));
         return new Vector3(x, y, zoom);
+    }
+
+
+
+    public void onDrag(BaseEventData eventData)
+    {
+            var pointerData = eventData as PointerEventData;
+            if (pointerData == null) { return; }
+
+        RectTransform rect = this.GetComponent<RectTransform>();
+        Vector2 size = new Vector2(_MapSize / 2, _MapSize / 2);
+
+        Vector2 screenSize = Vector2.zero;
+        screenSize.x = this.transform.parent.GetComponent<RectTransform>().rect.width;
+        screenSize.y = this.transform.parent.GetComponent<RectTransform>().rect.height;
+
+        Vector2 offset = Vector2.zero;
+        offset.x = this.transform.parent.parent.GetComponent<RectTransform>().offsetMax.y * -1;
+        offset.y = this.transform.parent.parent.GetComponent<RectTransform>().offsetMin.y;
+
+        Debug.Log(offset);
+
+        Debug.Log(screenSize);
+
+        Debug.LogWarning(screenSize + " / " + offset);
+
+        var currentPosition = rect.position;
+        currentPosition.x += pointerData.delta.x;
+        currentPosition.y += pointerData.delta.y;
+        if (currentPosition.x > size.x + screenSize.x)
+        {
+            currentPosition.x = -((size.x) - screenSize.x);
+        }
+        else if (currentPosition.x < -(size.x - (screenSize.x)) - screenSize.x)
+        {
+            currentPosition.x = (size.x);
+        }
+        if (currentPosition.y > size.y + offset.x)
+        {
+            Debug.Log("Bigger");
+            currentPosition.y = size.y + offset.x;
+        }
+        else if (currentPosition.y < -(size.x - screenSize.y - offset.y))
+        {
+            Debug.Log("Smaller");
+            currentPosition.y = -(size.x - screenSize.y - offset.y);
+        }
+
+        rect.position = currentPosition;
     }
 
 }

@@ -12,12 +12,17 @@ public class MapSceneController : MonoBehaviour {
     [SerializeField] Button _zoomInButton;
     [SerializeField] Button _zoomOutButton;
 
+    [SerializeField] GameObject _popupTextPanel;
+    [SerializeField] Text _popupText;
+
     int _currZoom = 1;
     int _maxZoom = 8;
     int _minZoom = 1;
 
 	// Use this for initialization
 	void Start () {
+        
+
         AddMapLocationPointers();
 	}
 
@@ -68,13 +73,11 @@ public class MapSceneController : MonoBehaviour {
 
     public void OnCityClick(MapLocationPointer mlp)
     {
-        foreach (MapLocationPointer pointer in _worldMapController.GetLocationPointers())
-            pointer.ViewPopupPanel(false);
-
         _worldMapController.ScrollToPosition(new Vector2(mlp.GetLocation().lat, mlp.GetLocation().lon));
 
-        mlp.SetPopupText(mlp.GetLocation().Name);
-        mlp.ViewPopupPanel(true);
+        _popupTextPanel.transform.localPosition = mlp.transform.localPosition - new Vector3(0, 255, 0);
+        _popupText.text = mlp.GetLocation().Name;
+        _popupTextPanel.SetActive(true);
     }
 
     public void OnBackButtonClick()
