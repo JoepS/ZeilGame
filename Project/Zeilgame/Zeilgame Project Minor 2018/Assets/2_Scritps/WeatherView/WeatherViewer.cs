@@ -21,6 +21,7 @@ public class WeatherViewer : MonoBehaviour {
         new WeatherSetting("thunderstorm", 7.5f, 250, false),
         new WeatherSetting("snow", 3.75f, 1, true),
         new WeatherSetting("mist", -1, 0, false),
+        new WeatherSetting("fog", -1, 0, false),
         new WeatherSetting("drizzle", 7.5f, 10, false),
         new WeatherSetting("drizzle rain", 7.5f, 10, false),
         new WeatherSetting("light rain", 7.5f, 75, false),
@@ -68,7 +69,6 @@ public class WeatherViewer : MonoBehaviour {
             _weatherData = _weatherController.GetCurrentData();
         }
         _currentWeatherSetting = FindWeatherSetting(_weatherData);
-
         DayNightAffected.FolowTime = !_currentWeatherSetting.Name.Equals("thunderstorm");
 
         _mistImage.SetActive(_currentWeatherSetting.CloudFrequency < 0);

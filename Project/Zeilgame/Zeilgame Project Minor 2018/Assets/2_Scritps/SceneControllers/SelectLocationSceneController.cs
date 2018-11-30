@@ -18,6 +18,8 @@ public class SelectLocationSceneController : MonoBehaviour {
 
     List<Location> _locations;
 
+    [SerializeField] GameObject _noNameText;
+
 	// Use this for initialization
 	void Start () {
         _locations = MainGameController.instance.databaseController.connection.Table<Location>().ToList();
@@ -40,6 +42,12 @@ public class SelectLocationSceneController : MonoBehaviour {
     public void OnNextButtonClick()
     {
         string name = _nameInputField.text;
+        if (name.Equals("") || name.Equals(string.Empty))
+        {
+            Debug.Log("No name input");
+            _noNameText.SetActive(true);
+            return;
+        }
         Location location = _locations[_locationDropdown.value];
         Player p = MainGameController.instance.player;
         Person person = new Person();
@@ -84,5 +92,17 @@ public class SelectLocationSceneController : MonoBehaviour {
         Location l = _locations[_locationDropdown.value];
 
         _worldMapController.ScrollToPosition(new Vector2(l.lat, l.lon));
+    }
+
+    public void OnNameValueChanged()
+    {
+        if(_nameInputField.text.Equals("") || _nameInputField.text.Equals(string.Empty))
+        {
+            _noNameText.SetActive(true);
+        }
+        else
+        {
+            _noNameText.SetActive(false);
+        }
     }
 }

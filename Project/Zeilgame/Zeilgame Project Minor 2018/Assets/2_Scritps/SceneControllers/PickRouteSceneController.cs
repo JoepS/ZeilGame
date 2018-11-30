@@ -12,7 +12,6 @@ public class PickRouteSceneController : MonoBehaviour {
     const string SailShopSceneName = "SailShopScene";
 
     [SerializeField] GameObject _worldMap;
-    [SerializeField] GameObject _scrollviewContent;
 
     [SerializeField] RouteSelectedConfirmPanel _routeSelectedConfirmPanel;
 
@@ -65,8 +64,8 @@ public class PickRouteSceneController : MonoBehaviour {
 
         float newsize = 4096 * _currZoom;
         Vector2 size = new Vector2(newsize, newsize);
-        _scrollviewContent.GetComponent<RectTransform>().sizeDelta = size;
-        _worldMap.GetComponent<RectTransform>().sizeDelta = size;
+        _worldMap.GetComponent<WorldMapController>().SetZoom(_currZoom);
+        _worldMap.GetComponent<WorldMapController>().SetNewSize(size);
 
         _worldMap.GetComponent<WorldMapController>().ScrollToPosition(MainGameController.instance.player.getCurrentLocationLatLon());
         _worldMap.GetComponent<WorldMapController>().CreateLocationPointers(true);
@@ -132,6 +131,7 @@ public class PickRouteSceneController : MonoBehaviour {
     {
         MainGameController.instance.sceneController.PushToStack(_selectedRoute);
         MainGameController.instance.player.CurrentRoute = _selectedRoute.id;
+        MainGameController.instance.player.LastInGame = JsonUtility.ToJson((JsonDateTime)DateTime.Now);
         MainGameController.instance.player.Save();
         MainGameController.instance.sceneController.LoadScene(SailingSceneName);
     }

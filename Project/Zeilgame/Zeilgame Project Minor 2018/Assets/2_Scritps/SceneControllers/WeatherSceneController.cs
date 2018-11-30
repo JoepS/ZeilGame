@@ -31,6 +31,12 @@ public class WeatherSceneController : MonoBehaviour {
             _downloadedWeatherImages = new List<OWMWeatherImage>();
         }
         StartCoroutine(getWindImages());
+        _worldMap.GetComponent<WorldMapController>().SetCanMove(false);
+        Route r = MainGameController.instance.player.GetCurrentRoute();
+        if(r!= null)
+        {
+            _worldMap.GetComponent<WorldMapController>().ShowRoute(r);
+        }
     }
 
 	// Update is called once per frame
@@ -45,9 +51,8 @@ public class WeatherSceneController : MonoBehaviour {
 
     public IEnumerator getWindImages()
     {
-        float worldMapSize = _windImagesParent.GetComponent<RectTransform>().sizeDelta.x;
+        float worldMapSize = 4096 * _currZoom;//_windImagesParent.GetComponent<RectTransform>().sizeDelta.x;
         int amount = Mathf.RoundToInt(Mathf.Sqrt((worldMapSize / 2048)));
-
         int maxxy = (int)Mathf.Pow(2, amount);
 
         Vector2 playerpos = MainGameController.instance.player.getCurrentLocationLatLon();
@@ -60,7 +65,7 @@ public class WeatherSceneController : MonoBehaviour {
 
         int lastIndex = 0;
 
-        //_windImagesParent.SetActive(false);
+        _windImagesParent.SetActive(false);
         _loadingImage.SetActive(true);
         _zoominButton.interactable = false;
         _zoomOutButton.interactable = false;
@@ -145,9 +150,9 @@ public class WeatherSceneController : MonoBehaviour {
 
         float newsize = 4096 * _currZoom;
         Vector2 size = new Vector2(newsize, newsize);
-        _scrollviewContent.GetComponent<RectTransform>().sizeDelta = size;
-        _worldMap.GetComponent<RectTransform>().sizeDelta = size;
-        _windImagesParent.GetComponent<RectTransform>().sizeDelta = size;
+        _worldMap.GetComponent<WorldMapController>().SetZoom(_currZoom);
+        _worldMap.GetComponent<WorldMapController>().SetNewSize(size);
+        //_windImagesParent.GetComponent<RectTransform>().sizeDelta = size;
         for (int i = 0; i < _windImagesParent.transform.childCount; i++)
         {
             //Destroy(_windImagesParent.transform.GetChild(i).gameObject);
@@ -165,14 +170,14 @@ public class WeatherSceneController : MonoBehaviour {
                 zoom = 0.5f;
             }
             child.transform.localPosition = new Vector2(2048 * zoom * pos.x, -(2048 * zoom) * pos.y);
-            if (increase)
-            {
-                child.transform.localPosition += new Vector3(1024, -1024, 0);
-            }
-            else
-            {
-                child.transform.localPosition -= new Vector3(512, -512, 0);
-            }
+            //if (increase)
+            //{
+            //    child.transform.localPosition += new Vector3(1024, -1024, 0);
+            //}
+            //else
+            //{
+            //    child.transform.localPosition -= new Vector3(512, -512, 0);
+            //}
         }
         StartCoroutine(getWindImages());
         _worldMap.GetComponent<WorldMapController>().ScrollToPosition(MainGameController.instance.player.getCurrentLocationLatLon());
@@ -204,7 +209,7 @@ public class WeatherSceneController : MonoBehaviour {
         windImage.GetComponent<Image>().mainTexture.filterMode = FilterMode.Point;
         windImage.GetComponent<RectTransform>().sizeDelta = new Vector2(2048, 2048);
         windImage.transform.localScale = Vector3.one;
-        windImage.transform.localPosition = new Vector2(pos.x * 2048, pos.y * -2048);
+        windImage.transform.localPosition = new Vector2(pos.x * 2048, pos.y * -2048) - new Vector2(1024, -1024);
         windImage.SetActive(false);
         
         _loadedIndex += 1;

@@ -306,5 +306,14 @@
 	}, {
 		"key": "dont_have_sail_text",
 		"value": "You dont have a sail yet!"
+	},{
+		"key": "name_text",
+		"value": "Name"
+	},{
+		"key": "pick_location_text",
+		"value": "Pick your starting location:"
+	},{
+		"key": "no_name_text",
+		"value": "You didn't input your name!"
 	}]
 }

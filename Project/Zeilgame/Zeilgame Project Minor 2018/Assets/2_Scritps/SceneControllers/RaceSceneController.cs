@@ -117,6 +117,7 @@ void Start () {
                 GameObject opponent = GameObject.Instantiate(_opponentPrefab);
                 opponent.name = "Opponent " + p.Name;
                 opponent.transform.SetParent(_opponentsParent.transform);
+                opponent.transform.localScale = Vector3.one;
                 opponent.transform.localPosition = Vector3.zero;
                 OpponentRaceAi ora = opponent.GetComponentInChildren<OpponentRaceAi>();
 
@@ -275,6 +276,7 @@ void Start () {
         {
             GameObject waypoint = GameObject.Instantiate(_waypoint);
             waypoint.transform.SetParent(_waypointsPanel.transform);
+            waypoint.transform.localScale = Vector3.one;
             waypoint.transform.localPosition = v2;
             _buoys.Add(waypoint);
         }

@@ -31,10 +31,10 @@ public class RandomItemSpawner : MonoBehaviour{
     {
         while (true)
         {
-            //SpawnRandomItem
-            SpawnRandomItem();
             float waitTime = Random.Range(60, 300);
             yield return new WaitForSeconds(waitTime);
+            //SpawnRandomItem
+            SpawnRandomItem();
         }
     }
 

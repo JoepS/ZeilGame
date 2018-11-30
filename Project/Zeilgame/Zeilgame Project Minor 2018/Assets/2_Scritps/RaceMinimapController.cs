@@ -35,6 +35,7 @@ public class RaceMinimapController : MonoBehaviour {
         GameObject oi = GameObject.Instantiate(_opponentImage);
         oi.SetActive(true);
         oi.transform.SetParent(_opponentParent.transform);
+        oi.transform.localScale = Vector3.one;
         _opponentImages.Add(oi);
 
     }

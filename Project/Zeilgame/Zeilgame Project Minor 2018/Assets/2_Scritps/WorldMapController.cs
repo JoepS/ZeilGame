@@ -23,6 +23,17 @@ public class WorldMapController : MonoBehaviour {
     public  const int EarthRadius = 6378137; //no seams with globe example
     private const float OriginShift = 2f * Mathf.PI * EarthRadius * 2f;
 
+    [SerializeField] Canvas _canvas;
+
+    Vector2 _canvasScale;
+
+    [SerializeField] GameObject _leftmap;
+    [SerializeField] GameObject _rightMap;
+
+    bool _canMove = true;
+
+    int _zoomLevel = 1;
+
     private void Awake()
     {
 
@@ -36,18 +47,24 @@ public class WorldMapController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        ScrollToPosition(new Vector2(0, 0));
+        //ScrollToPosition(new Vector2(0, 0));
         if (MainGameController.instance.player != null)
         {
             Vector2 playerpos = new Vector2(MainGameController.instance.player.CurrentLocationLat
                                             , MainGameController.instance.player.CurrentLocationLon);
-            //ScrollToPosition(playerpos);
+            ScrollToPosition(playerpos);
         }
+        _canvasScale = _canvas.transform.localScale;
 	}
 
 	// Update is called once per frame
 	void Update () {
 	}
+
+    public void SetCanMove(bool value)
+    {
+        _canMove = value;
+    }
 
     public void CreateLocationPointers(bool viewOnlyAvaliableLocations)
     {
@@ -65,9 +82,7 @@ public class WorldMapController : MonoBehaviour {
                 int currentLocationId = MainGameController.instance.player.CurrentLocation;
                 List<Route> routes = MainGameController.instance.databaseController.connection.Table<Route>().Where(x => x.from == currentLocationId ||
                                                                                                                         x.to == currentLocationId).ToList();
-                Debug.Log(routes.Count + "/ " + locations.Count);
                 locations = locations.Where(x => routes.Where(y => y.GetToLocation().id == x.id).Count() > 0 || routes.Where(y => y.GetFromLocation().id == x.id).Count() > 0).ToList();
-                Debug.Log(locations.Count);
                 //locations = locations.Where(x => routes.Where(y => y.GetFromLocation().id == x.id).Count() > 0).ToList();
                 //Debug.Log(locations.Count);
             }
@@ -96,17 +111,23 @@ public class WorldMapController : MonoBehaviour {
         _locationPointers.Add(locationPointer.GetComponent<MapLocationPointer>());
     }
 
+    public void SetZoom(int value)
+    {
+        _zoomLevel = value;
+    }
+
     public void ShowRoute(Route r)
     {
         for (int i = 0; i < _routePointerParent.transform.childCount; i++)
         {
             Destroy(_routePointerParent.transform.GetChild(i).gameObject);
         }
-        foreach (Vector2 c2 in r.GetListRoute())
+        foreach (Vector2 pos in r.GetListRoute())
         {
             GameObject routePointer = GameObject.Instantiate(_routePointer);
             routePointer.transform.SetParent(_routePointerParent.transform);
-            routePointer.transform.localPosition = WorldToMap(c2);
+            routePointer.transform.localScale = Vector3.one;
+            routePointer.transform.localPosition = WorldToMap(pos);
         }
         _currentRouteShowing = r;
     }
@@ -116,6 +137,21 @@ public class WorldMapController : MonoBehaviour {
         return _locationPointers;
     }
 
+    public void SetNewSize(Vector2 size)
+    {
+        this.GetComponent<RectTransform>().sizeDelta = size;
+        _MapSize = this.GetComponent<RectTransform>().sizeDelta.x;
+        _leftmap.GetComponent<RectTransform>().sizeDelta = size;
+        Vector3 loc = _leftmap.transform.localPosition;
+        loc.x = -4096 * _zoomLevel;
+        _leftmap.transform.localPosition = loc;
+
+        _rightMap.GetComponent<RectTransform>().sizeDelta = size;
+        loc = _rightMap.transform.localPosition;
+        loc.x = 4096 * _zoomLevel;
+        _rightMap.transform.localPosition = loc;
+    }
+
     public void ScrollToPosition(Vector2 position)
     {
         Vector2 mapPos = WorldToMap(position);
@@ -123,7 +159,12 @@ public class WorldMapController : MonoBehaviour {
         float posx = mapPos.x * -1;
         float posy = mapPos.y * -1;
 
-        this.GetComponent<RectTransform>().anchoredPosition = new Vector3(posx, posy, 0);
+        Vector3 pos = Vector3.zero;
+        pos.x = posx;
+        pos.y = posy;
+
+        this.GetComponent<RectTransform>().anchoredPosition = pos;
+
 
         if(MainGameController.instance.player == null)
         {
@@ -134,14 +175,16 @@ public class WorldMapController : MonoBehaviour {
     Vector2 MapToWorld(Vector2 mapCoordinates)
     {
         Vector2 worldCoordinates = new Vector2();
+        float mapSize = _MapSize;// * _zoomLevel;
+
 
         float coy = mapCoordinates.y;
         float cox = mapCoordinates.x;
         coy *= -1;
         float longitude = (cox - 0f) /
-            (_MapSize / 360f);
+            (mapSize / 360f);
         float latitude = (2f * Mathf.Atan(Mathf.Exp(
-            (coy - 0f) / -(_MapSize / (2f * Mathf.PI))))
+            (coy - 0f) / -(mapSize / (2f * Mathf.PI))))
             - Mathf.PI / 2f) * (180f / Mathf.PI);
 
         worldCoordinates.x = latitude;
@@ -153,14 +196,15 @@ public class WorldMapController : MonoBehaviour {
     Vector2 WorldToMap(Vector2 worldCoordinates)
     {
         Vector2 mapCoordinates = new Vector2();
-        var x = Mathf.Round(0f + (worldCoordinates.y * (_MapSize / 360)));
+        float mapSize = _MapSize;// * _zoomLevel;
+        var x = Mathf.Round(0f + (worldCoordinates.y * (mapSize / 360)));
         var f = Mathf.Min(
             Mathf.Max(
                  Mathf.Sin(worldCoordinates.x * (Mathf.PI / 180f)),
                 -0.9999f),
             0.9999f);
         var y = Mathf.Round(0f + .5f *
-            Mathf.Log((1f + f) / (1f - f)) * -(_MapSize / (2f * Mathf.PI)));
+            Mathf.Log((1f + f) / (1f - f)) * -(mapSize / (2f * Mathf.PI)));
         y *= -1;
 
         mapCoordinates.x = x;
@@ -222,29 +266,34 @@ public class WorldMapController : MonoBehaviour {
 
     public void onDrag(BaseEventData eventData)
     {
+        if (!_canMove)
+            return;
+
             var pointerData = eventData as PointerEventData;
             if (pointerData == null) { return; }
 
         RectTransform rect = this.GetComponent<RectTransform>();
         Vector2 size = new Vector2(_MapSize / 2, _MapSize / 2);
+        //size /= _zoomLevel;
+        size *= _canvasScale;
 
         Vector2 screenSize = Vector2.zero;
         screenSize.x = this.transform.parent.GetComponent<RectTransform>().rect.width;
         screenSize.y = this.transform.parent.GetComponent<RectTransform>().rect.height;
+        //screenSize /= _zoomLevel;
+        screenSize *= _canvasScale;
 
         Vector2 offset = Vector2.zero;
         offset.x = this.transform.parent.parent.GetComponent<RectTransform>().offsetMax.y * -1;
         offset.y = this.transform.parent.parent.GetComponent<RectTransform>().offsetMin.y;
-
-        Debug.Log(offset);
-
-        Debug.Log(screenSize);
-
-        Debug.LogWarning(screenSize + " / " + offset);
+        //offset /= _zoomLevel;
+        offset *= _canvasScale;
+        //Debug.LogError(screenSize + " / " + offset);
 
         var currentPosition = rect.position;
         currentPosition.x += pointerData.delta.x;
         currentPosition.y += pointerData.delta.y;
+        
         if (currentPosition.x > size.x + screenSize.x)
         {
             currentPosition.x = -((size.x) - screenSize.x);
@@ -255,12 +304,12 @@ public class WorldMapController : MonoBehaviour {
         }
         if (currentPosition.y > size.y + offset.x)
         {
-            Debug.Log("Bigger");
+            //Debug.Log("Bigger");
             currentPosition.y = size.y + offset.x;
         }
         else if (currentPosition.y < -(size.x - screenSize.y - offset.y))
         {
-            Debug.Log("Smaller");
+            //Debug.Log("Smaller");
             currentPosition.y = -(size.x - screenSize.y - offset.y);
         }
 

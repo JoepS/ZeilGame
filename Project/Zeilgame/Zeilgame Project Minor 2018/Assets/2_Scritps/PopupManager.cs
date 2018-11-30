@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PopupManager : MonoBehaviour {
 
@@ -55,9 +56,17 @@ public class PopupManager : MonoBehaviour {
 
     public void ViewPopup(string text, Sprite image, float viewTime)
     {
+        if (_popupDatas.Count > 0)
+        {
+            if (_popupDatas.Where(x => x.text.Equals(text)).FirstOrDefault() != null)
+            {
+                _popupDatas.Where(x => x.text.Equals(text)).First().assignedToGameObject.GetComponent<PopupPanel>().Reset();
+                return;
+            }
+        }
         PopupData data = new PopupData(text, image, viewTime);
         _popupDatas.Add(data);
-        if(_popupPanelParent == null)
+        if (_popupPanelParent == null)
         {
             Reset();
         }

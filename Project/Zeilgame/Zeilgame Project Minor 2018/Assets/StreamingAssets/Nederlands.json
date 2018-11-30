@@ -291,5 +291,14 @@
 	}, {
 		"key": "dont_have_sail_text",
 		"value": "Je hebt nog geen zeil!"
+	},{
+		"key": "name_text",
+		"value": "Naam"
+	},{
+		"key": "pick_location_text",
+		"value": "Kies je start locatie:"
+	},{
+		"key": "no_name_text",
+		"value": "Je hebt geen naam ingevoerd!"
 	}]
 }

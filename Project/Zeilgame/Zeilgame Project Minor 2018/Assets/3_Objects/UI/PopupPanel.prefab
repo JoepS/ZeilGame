@@ -122,6 +122,7 @@ MonoBehaviour:
   _popupText: {fileID: 114864925869195002}
   _popupImage: {fileID: 114146048534437776}
   _timerText: {fileID: 114756327447338872}
+  _canvasGroup: {fileID: 225983456861389836}
 --- !u!114 &114697055695249084
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -57,9 +57,10 @@ public class MapSceneController : MonoBehaviour {
 
         float newsize = 4096 * _currZoom;
         Vector2 size = new Vector2(newsize, newsize);
-        _scrollViewContent.GetComponent<RectTransform>().sizeDelta = size;
-        _worldMapController.GetComponent<RectTransform>().sizeDelta = size;
+        //_scrollViewContent.GetComponent<RectTransform>().sizeDelta = size;
 
+        _worldMapController.SetZoom(_currZoom);
+        _worldMapController.SetNewSize(size);
 
         _worldMapController.ScrollToPosition(MainGameController.instance.player.getCurrentLocationLatLon());
         _worldMapController.CreateLocationPointers(false);

@@ -20,21 +20,24 @@ public class RepairsSceneController : MonoBehaviour {
     float _dmgPercent;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
+        _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold;
         _boatToRepair = MainGameController.instance.player.GetActiveBoat();
-        if (_boatToRepair == null)
-            return;
-        _dmgPercent = (_boatToRepair.Damage / _boatToRepair.GetMaxDamage()) * 100;
-        _dmgPercent = Mathf.Round(_dmgPercent * 100) / 100;
+        _dmgPercent = 0;
+        if (_boatToRepair != null)
+        {
+            _dmgPercent = (_boatToRepair.Damage / _boatToRepair.GetMaxDamage()) * 100;
+            _dmgPercent = Mathf.Round(_dmgPercent * 100) / 100;
+        }
         string text = string.Format(MainGameController.instance.localizationManager.GetLocalizedValue("damage_percent_text"), _dmgPercent);
         if(Mathf.Approximately(_dmgPercent, 0))
         {
             text += "\n\n " + MainGameController.instance.localizationManager.GetLocalizedValue("no_need_to_repair_boat_text");
-            _selfFixButton.enabled = false;
-            _payFixButton.enabled = false;
+            _selfFixButton.gameObject.SetActive(false);
+            _payFixButton.gameObject.SetActive(false);
         }
         _damageText.text = text;
-        _goldText.text = MainGameController.instance.localizationManager.GetLocalizedValue("gold_text") + ": " + MainGameController.instance.player.Gold; 
 	}
 	
 	// Update is called once per frame

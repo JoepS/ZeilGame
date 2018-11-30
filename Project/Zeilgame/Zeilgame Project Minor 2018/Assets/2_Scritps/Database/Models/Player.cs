@@ -98,6 +98,16 @@ public class Player : Model {
         }
     }
 
+    public Route GetCurrentRoute()
+    {
+        if(CurrentRoute != -1)
+        {
+            Route r = MainGameController.instance.databaseController.connection.Table<Route>().Where(x => x.id == CurrentRoute).FirstOrDefault();
+            return r;
+        }
+        return null;
+    }
+
     public override string ToString()
     {
         return id + " / " + Name + " / " + Gold + " / " + StartLocation + " / " + CurrentLocation + " / " + CurrentRoute + " / " + GetLastInGame() + " / " + Level + " / " + Experience;

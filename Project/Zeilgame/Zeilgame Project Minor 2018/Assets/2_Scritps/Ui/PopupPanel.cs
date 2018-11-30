@@ -12,7 +12,7 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
 
     PopupData _data;
 
-    CanvasGroup _canvasGroup;
+    [SerializeField] CanvasGroup _canvasGroup;
     bool _clicked = false;
 
     float _remainingViewTime;
@@ -20,7 +20,7 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
     
     void Start()
     {
-        _canvasGroup = this.GetComponent<CanvasGroup>();
+        //_canvasGroup = this.GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 0;
         float time = _data.viewTime;
         if (_data.remainingTime > 0)
@@ -36,6 +36,12 @@ public class PopupPanel : MonoBehaviour, IPointerClickHandler {
         _data = data;
         _popupText.text = data.text;
         _popupImage.sprite = data.image;
+    }
+
+    public void Reset()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Fade(_data.viewTime));
     }
 
     IEnumerator Fade(float time)
